@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link, Routes, useNavigate, useLocation, Navigate, Outlet } from "react-router-dom";
-import { fakeAuthProvider } from "./auth";
 import { AuthProvider } from "./core/AuthProvider";
-import { AuthRoute } from "./core/AuthRoute";
+import { AuthRoute } from "./components/AuthRoute";
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));

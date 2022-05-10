@@ -3,7 +3,7 @@ import { fakeAuthProvider } from "./fakeAuthProvider";
 
 let AuthContext = React.createContext(null);
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
 
   let signin = (newUser, callback) => {
@@ -24,3 +24,9 @@ export function AuthProvider({ children }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+function useAuth() {
+  return React.useContext(AuthContext);
+}
+
+export { AuthProvider, useAuth }
