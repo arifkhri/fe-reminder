@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Outlet, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Outlet, Route, Link, Routes } from "react-router-dom";
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));
