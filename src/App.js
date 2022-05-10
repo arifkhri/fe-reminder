@@ -1,80 +1,98 @@
-import React from 'react';
-import 'antd/dist/antd.css';
-import './App.css';
-import { Form, Input, Button, Checkbox, Card } from 'antd';
-import { Image } from 'antd';
-import { Row, Col, Divider } from 'antd';
-import {ArrowRightOutlined} from '@ant-design/icons'
+import React from "react";
+import { BrowserRouter as Router, Switch, Outlet, Route, Link, Routes } from "react-router-dom";
 
-const Demo = () => {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+const Agenda = React.lazy(() => import("./pages/Agenda"));
+const Karyawan = React.lazy(() => import("./pages/Karyawan"));
+const Pengguna = React.lazy(() => import("./pages/Pengguna"));
+const Reminder = React.lazy(() => import("./pages/Reminder"));
+const Login = React.lazy(() => import("./pages/Login"));
+const NoMatch = React.lazy(() => import("./pages/NoMatch"));
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+// This site has 3 pages, all of which are rendered
+// dynamically in the browser (not server rendered).
+//
+// Although the page does not ever refresh, notice how
+// React Router keeps the URL up to date as you navigate
+// through the site. This preserves the browser history,
+// making sure things like the back button and bookmarks
+// work properly.
+
+export default function App() {
   return (
-    <div className="login-page">
-      <Card className="login-form" bordered={false}>
-        <Row>
-          <Col span={12} > </Col>
-          <Col span={12} > 
-            <div className="App"  >
-              <center>
-                <Image width={80} src="https://cdn.techinasia.com/data/images/gvfeK0yDvQn0ud43b2KkfVIlcsaFTcEaTpByzR6B.png" />
-              </center>
-              <center><h3>Selamat Datang</h3></center>
-              <header className="App-header">
-                <Form layout="vertical" name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} initialValues={{ remember: true }}
-                  onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
-                  autoComplete="off"
-                >
-                  <Form.Item label="Email" name="email" rules={[
-                    {
-                      required: true,
-                      message: 'Please input your email',
-                    },
-                    { type: "email", message: "Please enter the correct email" },
-                  ]}
-                  >
-                    <Input placeholder="only-hr@clodeo.com" />
-                  </Form.Item>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Reminder />} />
+        <Route
+          path="reminder"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <Reminder />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="agenda"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <Agenda />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="karyawan"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <Karyawan />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="pengguna"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <Pengguna />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <Login />
+            </React.Suspense>
+          }
+        />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+    </Routes>
+  );
+}
 
-                  <Form.Item label="Password" name="password" rules={[
-                    {
-                      required: true,
-                      message: 'Please input your password!',
-                    },
-                  ]}
-                  >
-                    <Input.Password placeholder="***" />
-                  </Form.Item>
+function Layout() {
+  return (
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Reminder</Link>
+          </li>
+          <li>
+            <Link to="/agenda">Agenda</Link>
+          </li>
+          <li>
+            <Link to="/karyawan">Karyawan</Link>
+          </li>
+          <li>
+            <Link to="/pengguna">Pengguna</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+      </nav>
+      <hr />
 
-                  <Form.Item name="remember" valuePropName="checked" wrapperCol={{
-                    offset: 0,
-                    span: 0,
-                  }}
-                  >
-                    <Checkbox>Ingat saya <Button type="link" htmlType="button" onClick>
-                      &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Lupa Password?</Button>
-                    </Checkbox>
-                  </Form.Item>
-
-                  <Form.Item wrapperCol={{ offset: 10, span: 16, }}>
-                    <Button type="primary" htmlType="submit" >
-                      Login <ArrowRightOutlined />
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </header>
-            </div>
-          </Col>
-        </Row>
-      </Card>
+      <Outlet />
     </div>
   );
-};
-
-export default Demo;
+}

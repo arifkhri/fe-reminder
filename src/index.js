@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Form, Input, Button, Checkbox, Space } from 'antd';
-import {CloseOutlined} from '@ant-design/icons'
 import Main from "./Main";
+import { BrowserRouter } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
-    <Main />
+    <BrowserRouter>
+      <App />
+      <Main />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
