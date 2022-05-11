@@ -1,0 +1,39 @@
+.ant-btn.ant-btn-link {
+    right: 8px;
+}
+
+.ant-btn.ant-btn-primary {
+    left: 10px;
+    width: 85px;
+    height: 40px;
+    background: linear-gradient(275.64deg, #147EE3 0%, #45A9FF 100%);
+    border-radius: 12px;
+}
+
+.ant-input {
+    box-sizing: border-box; 
+    padding: 10px 16px;
+    width: 360px;
+    height: 36px;
+    background: #FFFFFF;
+    border: 0.4px solid #F2F2F2;
+    box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
+    border-radius: 6px;
+}
+
+.h2{
+    margin-top: -65px;
+}
+
+.ant-modal-content {
+    width: 520px; 
+    width: 407px;
+    height: 300px;
+    box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
+    border-radius: 20px;
+}
+
+.ant-modal-header {
+    border-radius: 20px;
+}
+
