@@ -1,8 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './index.css';
+import './style.css';
 import { Form, Input, Button, Checkbox, Space } from 'antd';
-import {CloseOutlined} from '@ant-design/icons'
 
 const Main = () => {
     const onFinish = (values) => {
@@ -14,7 +13,7 @@ const Main = () => {
       };
     return (
       <div className="Main">
-      <h2>Lupa Password &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;  <CloseOutlined style={{color:'gray'}}/></h2><br/>
+      {/* <h2>Lupa Password </h2><br/> */}
       <p>Kata sandi baru akan dikirim ke email anda, pastikan <br/>
         email anda aktif atau hubungi admin.</p>
         <Form

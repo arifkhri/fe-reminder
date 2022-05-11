@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import 'antd/dist/antd.css';
-import './App.css';
+import './style.css';
 import { Form, Input, Button, Checkbox, Card } from 'antd';
 import { Image } from 'antd';
 import { Row, Col, Divider } from 'antd';
 import {ArrowRightOutlined} from '@ant-design/icons'
+import { Modal } from 'antd';
+import ForgotPassword from '../../components/ForgotPassword';
+
 
 
 function Login() {
@@ -15,12 +18,28 @@ function Login() {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   return (
     <div className="login-page">
-      <Card className="login-form" bordered={false}>
+      <Card className="login-form" bordered={false} >
         <Row>
-          <Col span={12} > </Col>
-          <Col span={12} > 
+          <Col span={12} className="logo" > <img src="/images/Group.png" alt=""/>
+          <center><p className="footer">2021 © Clodeo Reminder</p></center>
+          </Col>
+          <Col span={12} className="login" > 
             <div className="App"  >
               <center>
                 <Image width={80} src="https://cdn.techinasia.com/data/images/gvfeK0yDvQn0ud43b2KkfVIlcsaFTcEaTpByzR6B.png" />
@@ -32,7 +51,7 @@ function Login() {
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
                 >
-                  <Form.Item label="Email" name="email" rules={[
+                  <Form.Item  label="Email" name="email" rules={[
                     {
                       required: true,
                       message: 'Please input your email',
@@ -40,7 +59,7 @@ function Login() {
                     { type: "email", message: "Please enter the correct email" },
                   ]}
                   >
-                    <Input placeholder="only-hr@clodeo.com" />
+                    <Input className="txtemail" placeholder="only-hr@clodeo.com" />
                   </Form.Item>
 
                   <Form.Item label="Password" name="password" rules={[
@@ -58,13 +77,16 @@ function Login() {
                     span: 0,
                   }}
                   >
-                    <Checkbox>Ingat saya <Button type="link" htmlType="button" onClick>
-                      &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; Lupa Password?</Button>
+                    <Checkbox>Ingat saya <Button type="link" htmlType="button" onClick={showModal}>
+                      &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;  &emsp;Lupa Password?</Button>
+                      <Modal footer={null} title="Lupa Password" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                      <ForgotPassword />
+                    </Modal>
                     </Checkbox>
                   </Form.Item>
 
                   <Form.Item wrapperCol={{ offset: 10, span: 16, }}>
-                    <Button type="primary" htmlType="submit" >
+                    <Button className="btn-login" type="primary" htmlType="submit" >
                       Login <ArrowRightOutlined />
                     </Button>
                   </Form.Item>
@@ -77,4 +99,5 @@ function Login() {
       </div>
   );
 }
+
 export default Login;
