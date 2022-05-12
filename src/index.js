@@ -1,17 +1,8 @@
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import Router from "./serviceWorker";
-// import * as serviceWorker from "./serviceWorker";
-
-// ReactDOM.render(<Router />, document.getElementById("root"));
-
-// serviceWorker.unregister();
-
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -19,6 +10,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+      {/* <Main /> */}
     </BrowserRouter>
   </React.StrictMode>
 );

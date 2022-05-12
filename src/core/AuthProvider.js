@@ -29,4 +29,4 @@ function useAuth() {
   return React.useContext(AuthContext);
 }
 
-export { AuthProvider, useAuth }
+export { AuthProvider, useAuth };

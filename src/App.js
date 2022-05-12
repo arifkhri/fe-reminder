@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Routes, Outlet } from "react-router-dom";
+import { BrowserRouter as Route, Link, Routes, Outlet } from "react-router-dom";
 import { AuthProvider } from "./core/AuthProvider";
 import { AuthRoute } from "./components/AuthRoute";
 
@@ -7,7 +7,7 @@ const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));
 const Pengguna = React.lazy(() => import("./pages/Pengguna"));
 const Reminder = React.lazy(() => import("./pages/Reminder"));
-const Login = React.lazy(() => import("./pages/Login"));
+const Login = React.lazy(() => import("./pages/Login/index"));
 const NoMatch = React.lazy(() => import("./pages/NoMatch"));
 
 export default function App() {
