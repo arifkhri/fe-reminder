@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Link, Routes } from "react-router-dom";
+import Tampil from './components/Layout';
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));
@@ -71,28 +72,7 @@ export default function App() {
 function Layout() {
   return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Reminder</Link>
-          </li>
-          <li>
-            <Link to="/agenda">Agenda</Link>
-          </li>
-          <li>
-            <Link to="/karyawan">Karyawan</Link>
-          </li>
-          <li>
-            <Link to="/pengguna">Pengguna</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        </ul>
-      </nav>
-      <hr />
-
-      <Outlet />
+      <Tampil />
     </div>
   );
 }
