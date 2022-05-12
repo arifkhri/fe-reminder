@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter as Route, Link, Routes, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Routes, Outlet } from "react-router-dom";
 import { AuthProvider } from "./core/AuthProvider";
 import { AuthRoute } from "./components/AuthRoute";
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));
-const Pengguna = React.lazy(() => import("./pages/Pengguna"));
+const Pengguna = React.lazy(() => import("./pages/Pengguna/index"));
 const Reminder = React.lazy(() => import("./pages/Reminder"));
 const Login = React.lazy(() => import("./pages/Login/index"));
 const NoMatch = React.lazy(() => import("./pages/NoMatch"));
