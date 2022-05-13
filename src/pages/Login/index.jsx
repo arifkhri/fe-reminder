@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, Card, Row, Col, Modal, Space } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons'
+import { useLocation, useNavigate } from "react-router-dom";
 
 import validation from "../../core/helpers/validation";
 import ForgotPassword from '../../components/ForgotPassword';
+import { useAuth } from "../../core/AuthProvider";
 import './style.css';
 
+
 function Login() {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
+  const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const location = useLocation();
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
+
+  function handleSubmit() {
+    const formValues = form.getFieldsValue(true);
+
+    auth.signin(formValues.email, () => {
+      navigate(from, { replace: true });
+    });
+  }
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -45,11 +53,7 @@ function Login() {
 
               <center><h3>Selamat Datang</h3></center>
 
-              <Form layout="vertical" name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} initialValues={{ remember: true }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-              >
+              <Form form={form} onFinish={handleSubmit} layout="vertical" name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} initialValues={{ remember: true }} autoComplete="off">
                 <Form.Item wrapperCol={24} label="Email" name="email" rules={[validation.required(), validation.email()]}>
                   <Input className="txtemail" placeholder="only-hr@clodeo.com" />
                 </Form.Item>

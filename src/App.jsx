@@ -41,15 +41,19 @@ export default function App() {
           }
           />
           <Route path="karyawan" element={
-            <React.Suspense fallback={<>...</>}>
-              <Karyawan />
-            </React.Suspense>
+            <AuthRoute>
+              <React.Suspense fallback={<>...</>}>
+                <Karyawan />
+              </React.Suspense>
+            </AuthRoute>
           }
           />
           <Route path="pengguna" element={
-            <React.Suspense fallback={<>...</>}>
-              <Pengguna />
-            </React.Suspense>
+            <AuthRoute>
+              <React.Suspense fallback={<>...</>}>
+                <Pengguna />
+              </React.Suspense>
+            </AuthRoute>
           }
           />
           <Route path="*" element={<NoMatch />} />
@@ -58,3 +62,30 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+
+
+// function Layout() {
+//   return (
+//     <div>
+//       <ul>
+//         <li>
+//           <Link to="/login">Login</Link>
+//         </li>
+//         <li>
+//           <Link to="/reminder">Reminder</Link>
+//         </li>
+//         <li>
+//           <Link to="/agenda">Agenda</Link>
+//         </li>
+//         <li>
+//           <Link to="/karyawan">Karyawan</Link>
+//         </li>
+//         <li>
+//           <Link to="/pengguna">Pengguna</Link>
+//         </li>
+//       </ul>
+//       <Outlet />
+//     </div>
+//   );
+// }

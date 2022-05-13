@@ -7,7 +7,7 @@ const defaultMessage = {
   matchWith: "not same as"
 };
 
-export default {
+const validation = {
   /**
    * Required validation.
    *
@@ -51,3 +51,5 @@ export default {
   }
 
 }
+
+export default validation;
