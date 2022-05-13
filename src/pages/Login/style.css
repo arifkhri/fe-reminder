@@ -1,97 +1,51 @@
-.login-page {
-    padding: 200px;
-    background-color: #F4F9FD;
-  }
-  
-  
-  .ant-card-body {
-    background-color: #F4F9FD;
-  
-  }
-  
-  .App {
-    padding-top: 70px;
-    padding-bottom: 70px;
-     padding-left: 30px;
-     background-color: #FFFFFF;
-    border-radius: 30px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    }
-  
-  .ant-col.ant-col-12.logo{
-    border-radius: 30px;
-    background-color: #E5F3FE;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-  }
-  
-  .ant-checkbox-inner {
-    border-radius: 5px;
-  }
-  .ant-btn.ant-btn-primary.btn-login {
-    background: #3F8CFF;
-      box-shadow: 0px 6px 12px rgb(63 140 255 / 26%);
-      border-radius: 12px;
-      padding: 9px 24.5px;
-      width: 142px;
-      height: 44px;
-      left: -60px;
-  }
-  
-  
-  .ant-modal-body.ant-btn-primary{
-    left: 20px;
-    background: linear-gradient(275.64deg, #147EE3 0%, #45A9FF 100%);
-    border-radius: 12px;
-  }
-  
-  .ant-btn.ant-btn-default {
-    right: 50px;
-  }
-  
-  .ant-input-affix-wrapper.ant-input-password {
-    display: flex;
-      align-items: center;
-      padding: 10px 16px;
-      position: static;
-      width: 360px;
-      height: 45px;
-      left: 0px;
-      top: 32px;
-      background: #FFFFFF;
-      border: 1px solid #D8E0F0;
-      box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
-      border-radius: 12px;
-      flex: none;
-      order: 1;
-      flex-grow: 0;
-  }
-  
-  .ant-input.txtemail {
-    display: flex;
-      align-items: center;
-      padding: 10px 16px;
-      position: static;
-      width: 360px;
-      height: 45px;
-      left: 0px;
-      top: 32px;
-      background: #FFFFFF;
-      border: 1px solid #D8E0F0;
-      box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
-      border-radius: 12px;
-      flex: none;
-      order: 1;
-      flex-grow: 0;
-  }
-  
-  .img1 {
-      bottom: 7.7%; 
-      height: 522.2607421875px;
-  width: 573.6913452148438px;
-  left: 25.9163818359375px;
-  top: 51.833740234375px;
-  border-radius: 0px;
-  }
-  
+.login-page > .ant-card {
+  width: 880px;
+  margin: auto;
+}
+
+.ant-card-body {
+  background-color: #F4F9FD;
+}
+
+.container-form {
+  padding: 70px 40px;
+  background-color: #FFFFFF;
+  border-radius: 30px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.ant-col.ant-col-12.logo {
+  border-radius: 30px;
+  background-color: #E5F3FE;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-image: url("/public//images/Group.png");
+  background-repeat: no-repeat;
+  background-size: 470px 420px;
+  background-position: 65px 20px;
+}
+
+.ant-checkbox-inner {
+  border-radius: 5px;
+}
+
+.ant-btn.ant-btn-primary.btn-login {
+  background: #3F8CFF;
+  box-shadow: 0px 6px 12px rgb(63 140 255 / 26%);
+  border-radius: 12px;
+  padding: 9px 24.5px;
+  width: 142px;
+  height: 44px;
+}
+
+
+.ant-modal-body.ant-btn-primary {
+  left: 20px;
+  background: linear-gradient(275.64deg, #147EE3 0%, #45A9FF 100%);
+  border-radius: 12px;
+}
+
+.ant-btn.ant-btn-default {
+  right: 50px;
+}

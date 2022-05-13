@@ -1,0 +1,6 @@
+@import '~antd/dist/antd.min.css';
+@import './styles';
+
+body {
+  background-color: #F4F9FD;
+}
