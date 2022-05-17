@@ -7,7 +7,7 @@ import Layout from './components/Layout';
 import './App.css';
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
-const Karyawan = React.lazy(() => import("./pages/Karyawan"));
+const Karyawan = React.lazy(() => import("./pages/Employee"));
 const Pengguna = React.lazy(() => import("./pages/Pengguna"));
 const Reminder = React.lazy(() => import("./pages/Reminder"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -33,19 +33,19 @@ export default function App() {
           }
           />
           <Route path="agenda" element={
-            <AuthRoute>
+            // <AuthRoute>
               <React.Suspense fallback={<>...</>}>
                 <Agenda />
               </React.Suspense>
-            </AuthRoute>
+            // </AuthRoute>
           }
           />
-          <Route path="karyawan" element={
-            <AuthRoute>
+          <Route path="employee" element={
+            // <AuthRoute>
               <React.Suspense fallback={<>...</>}>
                 <Karyawan />
               </React.Suspense>
-            </AuthRoute>
+          //  </AuthRoute>
           }
           />
           <Route path="pengguna" element={

@@ -38,7 +38,6 @@ function Login() {
   };
 
   return (
-    <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
       <div className="login-page">
         <Card bordered={false} >
           <Row>
@@ -88,7 +87,6 @@ function Login() {
           <ForgotPassword />
         </Modal>
       </div>
-    </Space>
   );
 }
 
