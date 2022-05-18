@@ -3,12 +3,12 @@ import { Route, Routes, Navigate } from "react-router-dom";
 
 import { AuthProvider } from "./core/AuthProvider";
 import { AuthRoute } from "./components/AuthRoute";
-import Layout from './components/Layout';
-import './App.css';
+import Layout from "./components/Layout";
+import "./App.css";
 
 const Agenda = React.lazy(() => import("./pages/Agenda"));
 const Karyawan = React.lazy(() => import("./pages/Karyawan"));
-const Pengguna = React.lazy(() => import("./pages/Pengguna"));
+const Pengguna = React.lazy(() => import("./pages/User"));
 const Reminder = React.lazy(() => import("./pages/Reminder"));
 const Login = React.lazy(() => import("./pages/Login"));
 const NoMatch = React.lazy(() => import("./pages/NoMatch"));
@@ -19,42 +19,53 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/reminder" />} />
-          <Route path="/login" element={
-            <React.Suspense fallback={<>...</>}>
-              <Login />
-            </React.Suspense>
-          } />
-          <Route path="/reminder" element={
-            <AuthRoute>
+          <Route
+            path="/login"
+            element={
               <React.Suspense fallback={<>...</>}>
-                <Reminder />
+                <Login />
               </React.Suspense>
-            </AuthRoute>
-          }
+            }
           />
-          <Route path="agenda" element={
-            <AuthRoute>
-              <React.Suspense fallback={<>...</>}>
-                <Agenda />
-              </React.Suspense>
-            </AuthRoute>
-          }
+          <Route
+            path="/reminder"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Reminder />
+                </React.Suspense>
+              </AuthRoute>
+            }
           />
-          <Route path="karyawan" element={
-            <AuthRoute>
-              <React.Suspense fallback={<>...</>}>
-                <Karyawan />
-              </React.Suspense>
-            </AuthRoute>
-          }
+          <Route
+            path="agenda"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Agenda />
+                </React.Suspense>
+              </AuthRoute>
+            }
           />
-          <Route path="pengguna" element={
-            <AuthRoute>
+          <Route
+            path="karyawan"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Karyawan />
+                </React.Suspense>
+              </AuthRoute>
+            }
+          />
+          <Route
+            path="pengguna"
+            element={
+              // <AuthRoute>
               <React.Suspense fallback={<>...</>}>
                 <Pengguna />
               </React.Suspense>
-            </AuthRoute>
-          }
+              // </AuthRoute>
+            }
           />
           <Route path="*" element={<NoMatch />} />
         </Route>
@@ -62,8 +73,6 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-
 
 // function Layout() {
 //   return (
