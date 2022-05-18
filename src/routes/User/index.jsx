@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Modal, Switch, Col, Row, Card, Input, Button, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message } from "antd";
 import {
   ReloadOutlined,
   MenuOutlined,
@@ -11,26 +10,21 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 
+import axios from "../../core/helpers/axios";
+import useLocalData from "../../hooks/useLocalData";
 import NewUser from "./components/New";
 import UpdateUser from "./components/Update";
 import UpdateUserPassword from "./components/UpdatePassword";
 import "./style.css";
 
-const baseURL = "http://167.99.73.124:4005/api/v1/user?limit=2&offset=0";
-
 function Pengguna() {
-  const [post, setPost] = React.useState(null);
+  const { store } = useLocalData();
+  const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
+  const [filter, setFilter] = useState({ keyword: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState(null);
-
-  React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setPost(response.data.data);
-      console.log(response);
-    });
-  }, []);
-
-  if (!post) return null;
+  const [loading, setLoading] = useState(false);
+  axios.config(store);
 
   const columns = [
     {
@@ -51,16 +45,17 @@ function Pengguna() {
     {
       title: "STATUS",
       key: "action",
-      render: () => <Switch size="small" onClick={onClick}></Switch>,
+      dataIndex: "is_active",
+      render: (value, record) => <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>,
     },
     {
       title: "UPDATE",
       key: "action",
-      render: () => (
+      render: (_, record) => (
         <Button
           className="btn-sm btn-faint-primary"
           type=""
-          onClick={() => showModal("updateUser")}
+          onClick={() => showModal("updateUser", record)}
         >
           <EditOutlined />
         </Button>
@@ -69,11 +64,11 @@ function Pengguna() {
     {
       title: "PASSWORD",
       key: "action",
-      render: () => (
+      render: (_, record) => (
         <Button
           className="btn-sm btn-faint-warning"
           type=""
-          onClick={() => showModal("updatePassword")}
+          onClick={() => showModal("updatePassword", record)}
         >
           <LockOutlined />
         </Button>
@@ -81,65 +76,79 @@ function Pengguna() {
     },
   ];
 
-  const showModal = (type) => {
+  const showModal = (type, record) => {
     let tempModalData = {
-      content: <NewUser />,
+      content: <NewUser afterSubmit={() => afterSubmitUser()} />,
       title: "Tambah Pengguna",
       visible: true,
       onCancel: () => {
         setModalData({ visible: false });
-      },
-      // [<Button onCancel={handleCancelModal} onSubmit={handleOk}></Button>]}
+      }
     };
 
-    if (type == "updateUser") {
-      tempModalData.content = <UpdateUser />;
+    if (type === "updateUser") {
+      tempModalData.content = <UpdateUser data={record} afterSubmit={() => afterSubmitUser()} />;
       tempModalData.title = "Ubah Pengguna";
     }
 
-    if (type == "updatePassword") {
-      tempModalData.content = <UpdateUserPassword />;
+    if (type === "updatePassword") {
+      tempModalData.content = <UpdateUserPassword data={record} afterSubmit={() => afterSubmitUser()} />;
       tempModalData.title = "Ubah Password";
     }
 
     setModalData(tempModalData);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancelModal = () => {
+  function afterSubmitUser() {
+    getListData();
     setModalData({ visible: false });
-  };
-
-  const pengguna = [];
-  for (let i = 0; i < 46; i++) {
-    pengguna.push({
-      key: i,
-      name: `Edward King ${i}`,
-      email: "edwardking@gmail",
-      notelp: "01234567",
-    });
   }
 
-  function onClick(checked) {
+  function handleChangeStatus(data) {
+    const config = {
+      title: "Konfirmasi",
+      content: `Apakah anda yakin ${data.is_active ? 'menonaktifkan' : 'mengaktifkan'} user ${data.full_name}?`,
+      onOk: () => {
+        updateStatus(data);
+      }
+    };
+
     Modal.confirm(config);
   }
 
-  const config = {
-    title: "Konfirmasi",
-    content: (
-      <p>
-        apakah anda yakin mengaktifkan user ini? ,
-        <Button label="hide" onClick={() => Modal.destroyAll()}>
-          hide
-        </Button>
-      </p>
-    ),
+  function updateStatus(data) {
+    setLoading(true);
 
-    onCancel: () => {},
-  };
+    axios.put(`/user/${data.id}/active`, { is_active: !data.is_active }).then((response) => {
+      getListData();
+      message.success(response.data)
+
+    }).catch(({ response }) => {
+      message.error(response.data)
+      setLoading(false);
+    });
+  }
+
+  function getListData() {
+    setLoading(true);
+    axios.get('/user', { params: { keyword: filter.keyword, limit: tableData.limit, offset: tableData.offset } }).then((response) => {
+      setLoading(false);
+      setTableData({
+        limit: response.data.limit,
+        offset: response.data.offset,
+        current: tableData.current,
+        resource: response.data.data,
+        total: response.data.total
+      });
+    }).catch(() => {
+      setLoading(false);
+    });
+  }
+
+
+  useEffect(() => {
+    getListData();
+  }, []);
 
   return (
     <div>
@@ -148,25 +157,38 @@ function Pengguna() {
           <Input
             prefix={<SearchOutlined />}
             placeholder="Search"
-            // suffix={<CloseCircleFilled />}
+            onChange={(val) => { setFilter({ keyword: val.target.value }) }}
+            onPressEnter={() => getListData()}
+          // suffix={<CloseCircleFilled />}
           ></Input>
         </Col>
+
         <Col span={2} offset={14}>
           <Button className="btn-user" type="primary" onClick={showModal}>
             Tambah User <PlusOutlined />
           </Button>
         </Col>
+
         <Col span={1} offset={1}>
-          <Button className="btn-snow btn-sm" type="primary">
+          <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
             <ReloadOutlined />
           </Button>
         </Col>
+
         <Col span={1}>
           <Button className="btn-snow btn-sm" type="primary">
             <MenuOutlined />
           </Button>
         </Col>
       </Row>
+
+      <div className="list">
+        <Spin spinning={loading}>
+          <Table columns={columns} dataSource={tableData.resource} size="small" pagination={false} />
+          <Pagination total={tableData.total} pageSize={tableData.limit} />
+        </Spin>
+      </div>
+
 
       <Modal
         footer={null}
@@ -177,7 +199,6 @@ function Pengguna() {
         {modalData?.content}
       </Modal>
 
-      <Table columns={columns} dataSource={post} size="small" />
     </div>
   );
 }

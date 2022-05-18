@@ -4,6 +4,8 @@ import config from '../../config';
 
 const baseUrl = `${config.API_BE_URL}/api/v1`;
 
+let userData;
+
 // Add a request interceptor
 // axios.interceptors.request.use(function (config) {
 
@@ -25,39 +27,46 @@ const baseUrl = `${config.API_BE_URL}/api/v1`;
 //   return Promise.reject(error);
 // });
 
+function prepareRequest(url, options = {}, isNotV1) {
+  let enpointUrl = `${baseUrl}${url}`;
+  if(isNotV1) {
+    enpointUrl = `${config.API_BE_URL}/api${url}`;
+
+  } else {
+    options = {
+      headers: {
+        Authorization: `Bearer ${userData.access_token}`
+      },
+      ...options
+    }
+  }
+
+  return {enpointUrl, options};
+}
+
 
 const rest = {
-  post: (url, options, isV1) => {
-    let enpointUrl = `${baseUrl}/${url}`;
-    if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api${url}`;
-    }
+  config:(data) => {
+    userData = data?.userData;
+  },
+  post: (url, payload, notV1, opt) => {
+    const {enpointUrl, options} = prepareRequest(url, opt, notV1)
 
-    return axios.post(enpointUrl, options);
+    return axios.post(enpointUrl, payload, options);
   },
-  get: (url, options, isV1) => {
-    let enpointUrl = `${baseUrl}/${url}`;
-    if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api${url}`;
-    }
-    
+  get: (url, opt, notV1) => {
+    const {enpointUrl, options} = prepareRequest(url, opt, notV1)
     return axios.get(enpointUrl, options);
   },
-  put: (url, options, isV1) => {
-    let enpointUrl = `${baseUrl}/${url}`;
-    if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api${url}`;
-    }
+  put: (url, payload, notV1, opt) => {
+    const {enpointUrl, options} = prepareRequest(url, opt, notV1)
     
-    return axios.get(enpointUrl, options);
+    return axios.put(enpointUrl, payload, options);
   },
-  patch: (url, options, isV1) => {
-    let enpointUrl = `${baseUrl}/${url}`;
-    if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api${url}`;
-    }
+  patch: (url, payload, opt, notV1) => {
+    const {enpointUrl, options} = prepareRequest(url, opt, notV1)
     
-    return axios.get(enpointUrl, options);
+    return axios.patch(enpointUrl, payload, options);
   },
 }
 

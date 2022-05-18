@@ -1,35 +1,47 @@
-import React from "react";
-import { Form, Button } from "antd";
-import axios from "axios";
+import React, { useState } from "react";
+import { Form, Button, message, Spin } from "antd";
 
+import axios from "../../../core/helpers/axios";
+import useLocalData from "../../../hooks/useLocalData";
 import FieldMain from "./FieldMain";
 import FieldPassword from "./FieldPassword";
 
-const baseURL = "http://167.99.73.124:4005/api/v1/user";
-
-function New() {
+function New(props) {
+  const { store } = useLocalData();
   const [form] = Form.useForm();
-  const [post, setPost] = React.useState(null);
+  const [loading, setLoading] = useState(null);
+  axios.config(store);
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
-    axios.post(baseURL, formValues).then((response) => {
-      setPost(response.getFieldsValue);
+    setLoading(true);
+
+    axios.post('/user', formValues).then((response) => {
+      setLoading(false);
+      message.success(response.data);
+      props.afterSubmit();
+      
+    }).catch(({ response }) => {
+      message.error(response.data);
+      setLoading(false);
     });
-    console.log(formValues);
   }
 
-  function onCancel() {}
+  function onCancel() { 
+    props.afterSubmit();
+  }
 
   return (
-    <Form onFinish={handleSubmit} form={form} layout="vertical">
-      <FieldMain />
-      <FieldPassword />
-      <Button onClick={onCancel}>Kembali</Button>
-      <Button type="primary" htmlType="submit">
-        Simpan
-      </Button>
-    </Form>
+    <Spin spinning={loading}>
+      <Form onFinish={handleSubmit} form={form} layout="vertical">
+        <FieldMain />
+        <FieldPassword />
+        <Button onClick={onCancel}>Kembali</Button>
+        <Button type="primary" htmlType="submit">
+          Simpan
+        </Button>
+      </Form>
+    </Spin>
   );
 }
 

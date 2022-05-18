@@ -27,8 +27,6 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const { dispatch } = useLocalData();
-  
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const from = location.state?.from?.pathname || "/";
@@ -37,7 +35,7 @@ function Login() {
     const formValues = form.getFieldsValue(true);
     setLoading(true);
 
-    axios.post(`/login`, formValues, false).then((response) => {
+    axios.post(`/login`, formValues, true).then((response) => {
       cookie.set("user", JSON.stringify(response.data));
       dispatch({
         type: 'update',
@@ -53,18 +51,6 @@ function Login() {
     });
 
   }
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   return (
     <div className="login-page">
@@ -101,7 +87,7 @@ function Login() {
                   </Col>
 
                   <Col span={12} className="p-1 d-flex justify-content-end">
-                    <a className="link-action" type="link" htmlType="button" onClick={showModal}>Lupa Password?</a>
+                    <a className="link-action" type="link" htmlType="button" onClick={() => setIsModalVisible(true)}>Lupa Password?</a>
                   </Col>
                 </Row>
 
@@ -124,8 +110,8 @@ function Login() {
         footer={null}
         title="Lupa Password"
         visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onOk={() => setIsModalVisible(true)}
+        onCancel={() => setIsModalVisible(false)}
       >
         <ForgotPassword afterSubmit={() => setIsModalVisible(false)}/>
       </Modal>

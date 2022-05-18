@@ -8,11 +8,11 @@ import "./style.css";
 
 const ForgotPassword = (props) => {
   const [loading, setLoading] = useState(false);
-  const form = Form.userForm();
-  
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
     setLoading(true);
-    axios.post('/forgot-password', values).then((response) => {
+    axios.post('/forgot-password', values, true).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
@@ -32,6 +32,7 @@ const ForgotPassword = (props) => {
       <Spin spinning={loading}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
+            className="hide-required-sign"
             label="Email"
             name="email"
             rules={[validation.required("please input your email"), validation.email()]}>

@@ -27,7 +27,7 @@ export default function App() {
     try {
       if (userData && !isRequestingAuth) {
         isRequestingAuth = true;
-        axios.post('/user-by-token', { token: JSON.parse(userData).access_token }, false).then((response) => {
+        axios.post('/user-by-token', { token: JSON.parse(userData).access_token }, true).then((response) => {
           isRequestingAuth = false;
           cookie.set("user", JSON.stringify(response.data));
           dispatch({
