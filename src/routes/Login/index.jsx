@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Card, Row, Col, Modal, Space } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons'
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Card,
+  Row,
+  Col,
+  Modal,
+  Space,
+} from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import validation from "../../core/helpers/validation";
-import ForgotPassword from '../../components/ForgotPassword';
+import ForgotPassword from "./components/ForgotPassword";
 import { useAuth } from "../../core/AuthProvider";
-import './style.css';
-
+import "./style.css";
 
 function Login() {
   const [form] = Form.useForm();
@@ -39,7 +48,7 @@ function Login() {
 
   return (
       <div className="login-page">
-        <Card bordered={false} >
+        <Card bordered={false}>
           <Row>
             <Col xs={0} md={12} className="align-items-end col-illustration d-flex justify-content-center">
               <span className="copyright mb-4">2021 © Clodeo Reminder</span>
@@ -50,7 +59,9 @@ function Login() {
                 <img width={80} src="images/clodeo.png" alt="clodeo-logo" />
               </center>
 
-              <center><h3>Selamat Datang</h3></center>
+              <center>
+                <h3>Selamat Datang</h3>
+              </center>
 
               <Form form={form} onFinish={handleSubmit} layout="vertical" name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} initialValues={{ remember: true }} autoComplete="off">
                 <Form.Item className="hide-required-sign" wrapperCol={24} label="Email" name="email" rules={[validation.required(), validation.email()]}>
@@ -74,7 +85,11 @@ function Login() {
                 </Row>
 
                 <center>
-                  <Button className="btn-login" type="primary" htmlType="submit" >
+                  <Button
+                    className="btn-login"
+                    type="primary"
+                    htmlType="submit"
+                  >
                     Login <ArrowRightOutlined />
                   </Button>
                 </center>
@@ -83,7 +98,13 @@ function Login() {
           </Row>
         </Card>
 
-        <Modal footer={null} title="Lupa Password" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          footer={null}
+          title="Lupa Password"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
           <ForgotPassword />
         </Modal>
       </div>

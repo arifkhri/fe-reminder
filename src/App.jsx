@@ -19,42 +19,53 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/reminder" />} />
-          <Route path="/login" element={
-            <React.Suspense fallback={<>...</>}>
-              <Login />
-            </React.Suspense>
-          } />
-          <Route path="/reminder" element={
-            <AuthRoute>
+          <Route
+            path="/login"
+            element={
               <React.Suspense fallback={<>...</>}>
-                <Reminder />
+                <Login />
               </React.Suspense>
-            </AuthRoute>
-          }
+            }
           />
-          <Route path="agenda" element={
-            // <AuthRoute>
-              <React.Suspense fallback={<>...</>}>
-                <Agenda />
-              </React.Suspense>
-            // </AuthRoute>
-          }
+          <Route
+            path="/reminder"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Reminder />
+                </React.Suspense>
+              </AuthRoute>
+            }
           />
-          <Route path="employee" element={
-            // <AuthRoute>
-              <React.Suspense fallback={<>...</>}>
-                <Karyawan />
-              </React.Suspense>
-          //  </AuthRoute>
-          }
+          <Route
+            path="agenda"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Agenda />
+                </React.Suspense>
+              </AuthRoute>
+            }
           />
-          <Route path="pengguna" element={
-            <AuthRoute>
+          <Route
+            path="karyawan"
+            element={
+              <AuthRoute>
+                <React.Suspense fallback={<>...</>}>
+                  <Karyawan />
+                </React.Suspense>
+              </AuthRoute>
+            }
+          />
+          <Route
+            path="pengguna"
+            element={
+              // <AuthRoute>
               <React.Suspense fallback={<>...</>}>
                 <Pengguna />
               </React.Suspense>
-            </AuthRoute>
-          }
+              // </AuthRoute>
+            }
           />
           <Route path="*" element={<NoMatch />} />
         </Route>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
+import validation from "../../../../core/helpers/validation";
 
 import "./style.css";
 
@@ -18,16 +19,24 @@ const ForgotPassword = () => {
         Kata sandi baru akan dikirim ke email anda, pastikan <br />
         email anda aktif atau hubungi admin.
       </p>
-      <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+      <Form
+        layout="vertical"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
         <Form.Item
           label="Email"
           name="email"
           rules={[
-            {
-              required: true,
-              message: "Please input your email",
-            },
-            { type: "email", message: "Please enter the correct email" },
+            validation.required("please input your email"),
+            validation.email(),
+            // {
+            //   required: true,
+
+            //   message: "Please input your email",
+            // },
+            // { type: "email", message: "Please enter the correct email" },
           ]}
         >
           <Input placeholder="only-hr@clodeo.com" />
