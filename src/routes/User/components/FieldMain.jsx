@@ -7,7 +7,7 @@ function FieldMain() {
   return (
     <>
       <Form.Item
-        name={"name"}
+        name={"full_name"}
         label="Nama Lengkap"
         rules={[validation.required()]}
       >
