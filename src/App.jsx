@@ -8,7 +8,7 @@ import './style.css';
 
 const Agenda = React.lazy(() => import("./routes/Agenda"));
 const Karyawan = React.lazy(() => import("./routes/Employee"));
-const Pengguna = React.lazy(() => import("./routes/Pengguna"));
+const User = React.lazy(() => import("./routes/User"));
 const Reminder = React.lazy(() => import("./routes/Reminder"));
 const Login = React.lazy(() => import("./routes/Login"));
 const NoMatch = React.lazy(() => import("./routes/NoMatch"));
@@ -58,11 +58,11 @@ export default function App() {
             }
           />
           <Route
-            path="pengguna"
+            path="user"
             element={
               // <AuthRoute>
               <React.Suspense fallback={<>...</>}>
-                <Pengguna />
+                <User />
               </React.Suspense>
               // </AuthRoute>
             }

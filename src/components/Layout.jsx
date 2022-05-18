@@ -10,11 +10,11 @@ function Layout() {
 
   const { user } = useAuth();
 
-  if (!user) {
-    return (
-      <Outlet />
-    )
-  }
+  // if (!user) {
+  //   return (
+  //     <Outlet />
+  //   )
+  // }
 
   return (
     <BaseLayout style={{ minHeight: '100vh' }}>
