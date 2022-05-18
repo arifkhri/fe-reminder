@@ -1,11 +1,20 @@
 import React from "react";
+import axios from "axios";
 import { Form, Input, Button } from "antd";
 
 import "./style.css";
 
+const baseURL = "http://167.99.73.124:4005/api/forgot-password";
+
 const ForgotPassword = () => {
   const onFinish = (values) => {
     console.log("Success:", values);
+    axios
+      .post(baseURL, values)
+      .then((response) => {
+        console.log(response);
+      });
+
   };
 
   const onFinishFailed = (errorInfo) => {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Form, Input, Button, Checkbox, Card, Row, Col, Modal, Space } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import ForgotPassword from '../../components/ForgotPassword';
 import { useAuth } from "../../core/AuthProvider";
 import './style.css';
 
+const baseURL ="http://167.99.73.124:4005/api/login";
 
 function Login() {
   const [form] = Form.useForm();
@@ -19,11 +21,17 @@ function Login() {
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
+    axios
+      .post(baseURL, formValues)
+      .then((response) => {
+        auth.signin(response, () => {
+          navigate(from, { replace: true });
+        });
+        console.log(response);
+      });
 
-    auth.signin(formValues.email, () => {
-      navigate(from, { replace: true });
-    });
   }
+  
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -86,6 +94,7 @@ function Login() {
         <Modal footer={null} title="Lupa Password" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
           <ForgotPassword />
         </Modal>
+
       </div>
   );
 }
