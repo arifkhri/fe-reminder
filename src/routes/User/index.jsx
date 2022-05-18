@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Modal, Switch, Col, Row, Card, Input, Button, Table } from "antd";
 import {
   ReloadOutlined,
@@ -15,14 +16,26 @@ import UpdateUser from "./components/Update";
 import UpdateUserPassword from "./components/UpdatePassword";
 import "./style.css";
 
+const baseURL = "http://167.99.73.124:4005/api/v1/user?limit=2&offset=0";
+
 function Pengguna() {
+  const [post, setPost] = React.useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState(null);
+
+  React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setPost(response.data.data);
+      console.log(response);
+    });
+  }, []);
+
+  if (!post) return null;
 
   const columns = [
     {
       title: "NAMA",
-      dataIndex: "name",
+      dataIndex: "full_name",
       key: "name",
     },
     {
@@ -32,7 +45,7 @@ function Pengguna() {
     },
     {
       title: "NO. TELP",
-      dataIndex: "notelp",
+      dataIndex: "phone",
       key: "notelp",
     },
     {
@@ -125,7 +138,7 @@ function Pengguna() {
       </p>
     ),
 
-    onCancel: () => { },
+    onCancel: () => {},
   };
 
   return (
@@ -164,7 +177,7 @@ function Pengguna() {
         {modalData?.content}
       </Modal>
 
-      <Table columns={columns} dataSource={pengguna} size="small" />
+      <Table columns={columns} dataSource={post} size="small" />
     </div>
   );
 }
