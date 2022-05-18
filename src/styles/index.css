@@ -1,1 +1,7 @@
+@import "bootstrap.css";
 @import "form.css";
+
+.link-action {
+  color: #3F8CFF;
+  cursor: pointer;
+}
