@@ -13,8 +13,9 @@ function New() {
   }
 
   function onCancel() {}
+  
   return (
-    <Form onFinish={handleSubmit} form={form}>
+    <Form onFinish={handleSubmit} form={form} layout="vertical">
       <FieldMain />
       <FieldPassword />
       <Button onClick={onCancel}>Kembali</Button>

@@ -6,64 +6,6 @@
   color: #dbe0e3;
 }
 
-.ant-input-affix-wrapper {
-  border-radius: 8px;
-  border-color: #eef2f6;
-}
-
-.ant-btn.ant-btn-primary.btn-user {
-  width: auto;
-  height: auto;
-}
-
-.ant-btn.ant-btn-primary.btn-refresh {
-  width: auto;
-  height: auto;
-  background: #ffe2e4;
-  border-radius: 8px;
-  border-color: #ffe2e4;
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-}
-
-.anticon.anticon-reload {
-  color: #ef6262;
-}
-
-.ant-btn.ant-btn-primary.btn-menu {
-  width: auto;
-  height: auto;
-  background: #ffe2e4;
-  border-radius: 8px;
-  border-color: #ffe2e4;
-  flex: none;
-  order: 2;
-  flex-grow: 0;
-}
-
-.anticon.anticon-menu {
-  color: #ef6262;
-}
-
-.ant-btn.ant-btn.btn-update {
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  color: #147ee3;
-  border-color: #e5f3fe;
-  background-color: #e5f3fe;
-}
-
-.ant-btn.ant-btn.btn-password {
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  color: #d19000;
-  border-color: #ffedce;
-  background-color: #ffedce;
-}
-
 .columns {
   border-color: #e5f3fe;
 }

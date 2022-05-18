@@ -1,6 +1,11 @@
-.login-page > .ant-card {
+.login-page>.ant-card {
   width: 880px;
   margin: auto;
+}
+
+.login-page > .ant-input {
+  padding: 10px 16px;
+
 }
 
 .ant-card-body {
@@ -20,7 +25,7 @@
   background-color: #E5F3FE;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-image: url("/public//images/Group.png");
+  background-image: url("/public//images/login-illustration.png");
   background-repeat: no-repeat;
   background-size: 470px 420px;
   background-position: 65px 20px;
@@ -37,15 +42,4 @@
   padding: 9px 24.5px;
   width: 142px;
   height: 44px;
-}
-
-
-.ant-modal-body.ant-btn-primary {
-  left: 20px;
-  background: linear-gradient(275.64deg, #147EE3 0%, #45A9FF 100%);
-  border-radius: 12px;
-}
-
-.ant-btn.ant-btn-default {
-  right: 50px;
 }

@@ -1,0 +1,53 @@
+.ant-btn {
+  border-radius: 8px;
+  min-width: 36px;
+  border: 0;
+  padding: 5px 20px;
+  box-shadow: none;
+}
+
+.ant-btn.btn-sm{
+  padding: 5px;
+}
+
+.ant-btn::hover {
+  opacity: 20%;
+}
+
+.ant-btn.btn-primary-gradient {
+  background: linear-gradient(275.64deg, #147EE3 0%, #45A9FF 100%);
+}
+
+.ant-btn.btn-primary {
+  background: #3F8CFF;
+}
+
+.ant-btn.btn-faint-primary {
+  background: #E5F3FE;
+  color: #147EE3;
+}
+
+.ant-btn.btn-faint-danger {
+  background: #FFE2E4;
+  color: #D93535;
+}
+
+.ant-btn.btn-faint-warning {
+  background: #FFEDCE;
+  color: #D19000;
+}
+
+.ant-btn.btn-snow {
+  background: #FFF;
+  color: #31383F;
+}
+
+.ant-btn.btn-snow-success {
+  background: #FFF;
+  color: #00A88B;
+}
+
+.ant-btn.btn-snow-danger {
+  background: #FFF;
+  color: #D93535;
+}

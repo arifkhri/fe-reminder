@@ -4,6 +4,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./core/AuthProvider";
 import { AuthRoute } from "./components/AuthRoute";
 import Layout from './components/Layout';
+import Loading from './components/Loading';
 import './style.css';
 
 const Agenda = React.lazy(() => import("./routes/Agenda"));
@@ -22,7 +23,7 @@ export default function App() {
           <Route
             path="/login"
             element={
-              <React.Suspense fallback={<>...</>}>
+              <React.Suspense fallback={<Loading />}>
                 <Login />
               </React.Suspense>
             }
@@ -31,43 +32,43 @@ export default function App() {
             path="/reminder"
             element={
               <AuthRoute>
-                <React.Suspense fallback={<>...</>}>
+                <React.Suspense fallback={<Loading />}>
                   <Reminder />
                 </React.Suspense>
               </AuthRoute>
             }
           />
           <Route
-            path="agenda"
+            path="/agenda"
             element={
               <AuthRoute>
-                <React.Suspense fallback={<>...</>}>
+                <React.Suspense fallback={<Loading />}>
                   <Agenda />
                 </React.Suspense>
               </AuthRoute>
             }
           />
           <Route
-            path="karyawan"
+            path="/employee"
             element={
               <AuthRoute>
-                <React.Suspense fallback={<>...</>}>
+                <React.Suspense fallback={<Loading />}>
                   <Karyawan />
                 </React.Suspense>
               </AuthRoute>
             }
           />
           <Route
-            path="user"
+            path="/user"
             element={
               // <AuthRoute>
-              <React.Suspense fallback={<>...</>}>
+              <React.Suspense fallback={<Loading />}>
                 <User />
               </React.Suspense>
               // </AuthRoute>
             }
           />
-          <Route path="*" element={<NoMatch />} />
+          <Route path="/*" element={<NoMatch />} />
         </Route>
       </Routes>
     </AuthProvider>

@@ -1,3 +1,20 @@
+aside {
+  background-color: #F4F9FD !important;
+}
+
+aside > .ant-layout-sider-children {
+  padding: 1rem;
+}
+
+.aside-content {
+  border-radius: 24px;
+  background: #fff;
+  height: 100%;
+}
+
 .ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
-    height: 416px;
+  height: 416px;
+}
+.menu-item::hover {
+  cursor: pointer!important;
 }

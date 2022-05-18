@@ -1,6 +1,6 @@
-.ant-input {
+.ant-input, .ant-input-affix-wrapper {
   align-items: center;
-  padding: 10px 16px;
+  padding: 5px 16px;
   width: 100%;
   background: #FFFFFF;
   border: 1px solid #D8E0F0;

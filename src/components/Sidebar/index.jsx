@@ -1,12 +1,21 @@
 import React from "react";
 import { Layout, Menu } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { useLocation, useNavigate } from 'react-router-dom';
+import menu from './menu';
 
 import './style.css';
 
 const { Sider } = Layout;
 
 function Sidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function onClickNavItem(to) {
+    console.log('yoman')
+    navigate(to);
+  }
+
   return (
     <Sider
       breakpoint="lg"
@@ -18,18 +27,28 @@ function Sidebar() {
         console.log(collapsed, type);
       }}
     >
-      <div className="logo" />
-      <Menu
-        mode="inline"
-        defaultSelectedKeys={['4']}
-        items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-          (icon, index) => ({
-            key: String(index + 1),
-            icon: React.createElement(icon),
-            label: `nav ${index + 1}`,
-          }),
-        )}
-      />
+      <div className="aside-content">
+        <center>
+          <img width={80} src="images/clodeo.png" alt="clodeo-logo" className="py-4" />
+        </center>
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={['4']}
+        >
+          {
+            menu.map((data) => {
+              return (
+                <Menu.Item className="no-action" onClick={() => onClickNavItem(data.to)}>
+                  <div className="menu-item d-flex">
+                    <img src={`/images/${data.icon}.svg`} className="mr-2" alt={`img-${data.icon}`}/>
+                    <span>{data.title}</span>
+                  </div>
+                </Menu.Item>
+              )
+            })
+          }
+        </Menu>
+      </div>
     </Sider>
   );
 }

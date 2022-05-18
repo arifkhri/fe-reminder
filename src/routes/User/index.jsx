@@ -45,7 +45,7 @@ function Pengguna() {
       key: "action",
       render: () => (
         <Button
-          className="btn-update"
+          className="btn-sm btn-faint-primary"
           type=""
           onClick={() => showModal("updateUser")}
         >
@@ -58,7 +58,7 @@ function Pengguna() {
       key: "action",
       render: () => (
         <Button
-          className="btn-update"
+          className="btn-sm btn-faint-warning"
           type=""
           onClick={() => showModal("updatePassword")}
         >
@@ -125,37 +125,35 @@ function Pengguna() {
       </p>
     ),
 
-    onCancel: () => {},
+    onCancel: () => { },
   };
 
   return (
     <div>
-      <Card>
-        <Row>
-          <Col className="search" span={4}>
-            <Input
-              prefix={<SearchOutlined />}
-              placeholder="Search"
-              suffix={<CloseCircleFilled />}
-            ></Input>
-          </Col>
-          <Col span={2} offset={14}>
-            <Button className="btn-user" type="primary" onClick={showModal}>
-              Tambah User <PlusOutlined />
-            </Button>
-          </Col>
-          <Col span={1} offset={1}>
-            <Button className="btn-refresh" type="primary">
-              <ReloadOutlined />
-            </Button>
-          </Col>
-          <Col span={1}>
-            <Button className="btn-menu" type="primary">
-              <MenuOutlined />
-            </Button>
-          </Col>
-        </Row>
-      </Card>
+      <Row className="mb-4 mt-5 pt-2">
+        <Col className="search" span={4}>
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="Search"
+            // suffix={<CloseCircleFilled />}
+          ></Input>
+        </Col>
+        <Col span={2} offset={14}>
+          <Button className="btn-user" type="primary" onClick={showModal}>
+            Tambah User <PlusOutlined />
+          </Button>
+        </Col>
+        <Col span={1} offset={1}>
+          <Button className="btn-snow btn-sm" type="primary">
+            <ReloadOutlined />
+          </Button>
+        </Col>
+        <Col span={1}>
+          <Button className="btn-snow btn-sm" type="primary">
+            <MenuOutlined />
+          </Button>
+        </Col>
+      </Row>
 
       <Modal
         footer={null}

@@ -25,6 +25,7 @@ export default function Header() {
   }
 
   function handleLogout() {
+    navigate("/login");
     window.location.reload();
   }
 
