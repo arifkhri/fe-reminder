@@ -30,7 +30,7 @@ const rest = {
   post: (url, options, isV1) => {
     let enpointUrl = `${baseUrl}/${url}`;
     if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api/${url}`;
+      enpointUrl = `${config.API_BE_URL}/api${url}`;
     }
 
     return axios.post(enpointUrl, options);
@@ -38,7 +38,7 @@ const rest = {
   get: (url, options, isV1) => {
     let enpointUrl = `${baseUrl}/${url}`;
     if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api/${url}`;
+      enpointUrl = `${config.API_BE_URL}/api${url}`;
     }
     
     return axios.get(enpointUrl, options);
@@ -46,7 +46,7 @@ const rest = {
   put: (url, options, isV1) => {
     let enpointUrl = `${baseUrl}/${url}`;
     if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api/${url}`;
+      enpointUrl = `${config.API_BE_URL}/api${url}`;
     }
     
     return axios.get(enpointUrl, options);
@@ -54,7 +54,7 @@ const rest = {
   patch: (url, options, isV1) => {
     let enpointUrl = `${baseUrl}/${url}`;
     if(!isV1) {
-      enpointUrl = `${config.API_BE_URL}/api/${url}`;
+      enpointUrl = `${config.API_BE_URL}/api${url}`;
     }
     
     return axios.get(enpointUrl, options);

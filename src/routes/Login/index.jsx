@@ -127,7 +127,7 @@ function Login() {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <ForgotPassword />
+        <ForgotPassword afterSubmit={() => setIsModalVisible(false)}/>
       </Modal>
     </div>
   );
