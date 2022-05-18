@@ -22,3 +22,7 @@
   box-shadow: none;
   border-radius: 0;
 }
+
+.hide-required-sign > .ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
+  display: none;
+}

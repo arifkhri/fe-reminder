@@ -4,14 +4,14 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./core/AuthProvider";
 import { AuthRoute } from "./components/AuthRoute";
 import Layout from './components/Layout';
-import './App.css';
+import './style.css';
 
-const Agenda = React.lazy(() => import("./pages/Agenda"));
-const Karyawan = React.lazy(() => import("./pages/Employee"));
-const Pengguna = React.lazy(() => import("./pages/Pengguna"));
-const Reminder = React.lazy(() => import("./pages/Reminder"));
-const Login = React.lazy(() => import("./pages/Login"));
-const NoMatch = React.lazy(() => import("./pages/NoMatch"));
+const Agenda = React.lazy(() => import("./routes/Agenda"));
+const Karyawan = React.lazy(() => import("./routes/Employee"));
+const Pengguna = React.lazy(() => import("./routes/Pengguna"));
+const Reminder = React.lazy(() => import("./routes/Reminder"));
+const Login = React.lazy(() => import("./routes/Login"));
+const NoMatch = React.lazy(() => import("./routes/NoMatch"));
 
 export default function App() {
   return (
@@ -62,30 +62,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-
-
-// function Layout() {
-//   return (
-//     <div>
-//       <ul>
-//         <li>
-//           <Link to="/login">Login</Link>
-//         </li>
-//         <li>
-//           <Link to="/reminder">Reminder</Link>
-//         </li>
-//         <li>
-//           <Link to="/agenda">Agenda</Link>
-//         </li>
-//         <li>
-//           <Link to="/karyawan">Karyawan</Link>
-//         </li>
-//         <li>
-//           <Link to="/pengguna">Pengguna</Link>
-//         </li>
-//       </ul>
-//       <Outlet />
-//     </div>
-//   );
-// }

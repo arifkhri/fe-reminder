@@ -1,3 +1,13 @@
-.ant-menu-overflow-item.ant-menu-item.ant-menu-item-only-child {
-    left: 15%;
+.ant-layout-header {
+  background: transparent!important;
+  line-height: 0!important;
+  line-height: 0!important;
+  padding: 10px 40px 0 40px!important;
+}
+
+.avatar-group {
+  background: #fff;
+  padding: 10px;
+  border-radius: 14px;
+  cursor: pointer;
 }
