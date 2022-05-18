@@ -8,30 +8,50 @@ import {
   Row,
   Col,
   Modal,
-  Space,
+  message,
+  Spin
 } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import cookie from '../../core/helpers/cookie';
+import axios from '../../core/helpers/axios';
+import useLocalData from '../../hooks/useLocalData';
 import validation from "../../core/helpers/validation";
 import ForgotPassword from "./components/ForgotPassword";
-import { useAuth } from "../../core/AuthProvider";
+
 import "./style.css";
 
 function Login() {
   const [form] = Form.useForm();
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const location = useLocation();
-  const auth = useAuth();
   const navigate = useNavigate();
+  const { dispatch } = useLocalData();
+  
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const from = location.state?.from?.pathname || "/";
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
+    setLoading(true);
 
-    auth.signin(formValues.email, () => {
+    axios.post(`/login`, formValues, false).then((response) => {
+      cookie.set("user", JSON.stringify(response.data));
+      dispatch({
+        type: 'update',
+        value: response.data,        
+        name: 'userData',
+      })
       navigate(from, { replace: true });
+      setLoading(true);
+
+    }).catch(({response}) => {
+      setLoading(false);
+      message.error(response.data);
     });
+
   }
 
   const showModal = () => {
@@ -47,7 +67,8 @@ function Login() {
   };
 
   return (
-      <div className="login-page">
+    <div className="login-page">
+      <Spin spinning={loading}>
         <Card bordered={false}>
           <Row>
             <Col xs={0} md={12} className="align-items-end col-illustration d-flex justify-content-center">
@@ -97,17 +118,18 @@ function Login() {
             </Col>
           </Row>
         </Card>
+      </Spin>
 
-        <Modal
-          footer={null}
-          title="Lupa Password"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <ForgotPassword />
-        </Modal>
-      </div>
+      <Modal
+        footer={null}
+        title="Lupa Password"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <ForgotPassword />
+      </Modal>
+    </div>
   );
 }
 

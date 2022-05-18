@@ -12,7 +12,6 @@ function Sidebar() {
   const navigate = useNavigate();
 
   function onClickNavItem(to) {
-    console.log('yoman')
     navigate(to);
   }
 
@@ -20,12 +19,6 @@ function Sidebar() {
     <Sider
       breakpoint="lg"
       collapsedWidth="0"
-      onBreakpoint={broken => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
     >
       <div className="aside-content">
         <center>

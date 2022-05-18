@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { Layout as BaseLayout } from "antd";
 
-import { useAuth } from '../../core/AuthProvider';
+import useLocalData from '../../hooks/useLocalData';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 
@@ -10,9 +10,9 @@ import './style.css';
 
 function Layout() {
 
-  const { user } = useAuth();
+  const { store } = useLocalData();
 
-  if (!user) {
+  if (!store?.userData) {
     return (
       <Outlet />
     )

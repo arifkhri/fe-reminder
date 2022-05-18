@@ -25,8 +25,13 @@ export default function Header() {
   }
 
   function handleLogout() {
+    cookie.del('user');
+    dispatch({
+      type: 'update',
+      value: null,
+      name: 'userData',
+    });
     navigate("/login");
-    window.location.reload();
   }
 
   return (
@@ -106,7 +111,7 @@ export default function Header() {
               <div className="avatar-group">
                 <Avatar size="md" type="square" />
                 <span className="label">
-                  <span className="pr-4 pl-2">Admin</span>
+                  <span className="pr-4 pl-2">{store?.userData?.full_name}</span>
                   <DownOutlined />
                 </span>
               </div>

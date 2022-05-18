@@ -1,5 +1,5 @@
-.login-page>.ant-card {
-  width: 880px;
+.login-page > .ant-card {
+  width: 880px!important;
   margin: auto;
 }
 
