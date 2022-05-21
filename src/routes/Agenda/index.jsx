@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 // import './style.css';
-import { Layout, Table, Switch, Button, Col, Input, Row } from "antd";
+import {
+  Layout,
+  Table,
+  Switch,
+  Button,
+  Col,
+  Input,
+  Row,
+  Pagination,
+  Spin,
+  Modal,
+} from "antd";
 import {
   EditOutlined,
   PlusOutlined,
@@ -10,8 +22,9 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 
-// import axios from "axios";
-// import useLocalData from "../../hooks/useLocalData";
+import axios from "../../core/helpers/axios";
+import useLocalData from "../../hooks/useLocalData";
+import CreateAgenda from "./components/Agenda Baru";
 
 const { Header, Content, Sider } = Layout;
 const items1 = ["1", "2", "3"].map((key) => ({
@@ -20,22 +33,42 @@ const items1 = ["1", "2", "3"].map((key) => ({
 }));
 
 function Agenda() {
-  // const { store } = useLocalData();
-  // axios.config(store);
+  const { store } = useLocalData();
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState({ keyword: "" });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  axios.config(store);
+  const [tableData, setTableData] = useState({
+    offset: 0,
+    limit: 10,
+    resource: [],
+    current: 0,
+    total: 0,
+  });
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const columns = [
     {
       title: "NAMA",
-      dataIndex: "employee_id",
-      key: "name",
-      // render: () => ({
-      //   dataIndex: "id",
-      // }),
+      dataIndex: "employee",
+      key: "employee",
+      // render: (dataIndex) => ({ dataIndex: "employee_id", record }),
     },
     {
       title: "JABATAN",
-      dataIndex: "department",
-      key: "department",
+      dataIndex: "position",
+      key: "position",
     },
     {
       title: "TANGGAL",
@@ -44,8 +77,8 @@ function Agenda() {
     },
     {
       title: "KEPERLUAN",
-      dataIndex: "position",
-      key: "position",
+      dataIndex: "description",
+      key: "description",
     },
     {
       title: "PENGINGAT",
@@ -63,7 +96,7 @@ function Agenda() {
       key: "action",
       dataIndex: "edit",
       render: (text, record) => (
-        <Button type="primary">
+        <Button type="primary" className="btn-faint-primary">
           <EditOutlined />
         </Button>
       ),
@@ -73,25 +106,41 @@ function Agenda() {
       key: "action",
       dataIndex: "edit",
       render: (text, record) => (
-        <Button type="primary">
+        <Button type="primary" className="btn-faint-danger">
           <DeleteOutlined />
         </Button>
       ),
     },
   ];
 
-  const data = [];
-  // for (let i = 1; i < 30; i++) {
-  //   data.push({
-  //     key: i,
-  //     employee_id: `James Alibaba`,
-  //     id: `12345`,
-  //     department: `Business Analyst`,
-  //     date: `${i} Juli 2021`,
-  //     position: `Review Kinerja Karyawan`,
-  //     remind_at: `1 Juni 2021`,
-  //   });
-  // }
+  function getListData() {
+    setLoading(true);
+    axios
+      .get("/agenda", {
+        params: {
+          keyword: filter.keyword,
+          limit: tableData.limit,
+          offset: tableData.offset,
+        },
+      })
+      .then((response) => {
+        setLoading(false);
+        setTableData({
+          limit: response.data.limit,
+          offset: response.data.offset,
+          current: tableData.current,
+          resource: response.data.data,
+          total: response.data.total,
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    getListData();
+  }, []);
   return (
     <div>
       <Row className="mb-4 mt-5 pt-2">
@@ -99,6 +148,10 @@ function Agenda() {
           <Input
             prefix={<SearchOutlined />}
             placeholder="Search"
+            onChange={(val) => {
+              setFilter({ keyword: val.target.value });
+            }}
+            onPressEnter={() => getListData()}
             // suffix={<CloseCircleFilled />}
           ></Input>
         </Col>
@@ -118,18 +171,42 @@ function Agenda() {
         </Col>
 
         <Col span={2} offset={1}>
-          <Button className="btn-snow btn-sm" type="primary">
+          <Button
+            className="btn-snow btn-sm"
+            type="primary"
+            onClick={() => getListData()}
+          >
             <ReloadOutlined />
           </Button>
         </Col>
 
         <Col span={1}>
-          <Button className="btn-user" type="primary" oncl>
+          <Button className="btn-user" type="primary" onClick={showModal}>
             Agenda Baru <PlusOutlined />
           </Button>
         </Col>
       </Row>
-      <Table columns={columns} dataSource={data} />;
+      <div className="list">
+        <Spin spinning={loading}>
+          <Table
+            columns={columns}
+            dataSource={tableData.resource}
+            size="small"
+            pagination={false}
+          />
+          <Pagination total={tableData.total} pageSize={tableData.limit} />
+        </Spin>
+      </div>
+
+      <Modal
+        title="Agenda Baru"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <CreateAgenda />
+      </Modal>
     </div>
   );
 }
