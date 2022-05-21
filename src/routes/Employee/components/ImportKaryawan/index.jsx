@@ -6,7 +6,7 @@ import validation from "../../../../core/helpers/validation";
 
 // import "./style.css";
 
-const ForgotPassword = (props) => {
+const ImportKaryawan = (props) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -45,4 +45,4 @@ const ForgotPassword = (props) => {
   );
 };
 
-export default ForgotPassword;
+export default ImportKaryawan;
