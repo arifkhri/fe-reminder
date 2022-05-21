@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
-import { Table, Tag, Space, Button, Row, Col, Input, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Tag, Space, Button, Row, Col, Input, Modal, Pagination, Spin } from 'antd';
 import {
 EditOutlined,
 SearchOutlined,
 PlusOutlined,
 ReloadOutlined,
-UploadOutlined
+UploadOutlined,
+MailOutlined
 } from "@ant-design/icons";
 
+import axios from "../../core/helpers/axios";
+import useLocalData from "../../hooks/useLocalData";
 import ImportKaryawan from "./components/ImportKaryawan";
+import EmployeeBaru from "./components/EmployeeBaru";
 
 function Employee() {
+  const { store } = useLocalData();
+  const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
+  const [filter, setFilter] = useState({ keyword: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  axios.config(store);
+
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -36,12 +46,14 @@ function Employee() {
       title: "NAMA",
       dataIndex: "full_name",
       key: "name",
-      // render: text => <a>{text}</a>,
+      // render: (text, record) => (
+      //   <span>{record.first_name} {record.last_name} </span>
+      // )
     },
     {
       title: "JABATAN ",
-      dataIndex: "departmen",
-      key: "departmen",
+      dataIndex: "position",
+      key: "position",
     },
     {
       title: "EMAIL",
@@ -68,17 +80,25 @@ function Employee() {
     },
   ];
 
-  const data = [];
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        key: i,
-        full_name: `James Alibaba`,
-        departmen: `Business Analyst`,
-        email: 'JamesAlibaba@gmail.com',
-        phone: `0890283620${i}`,
-        picture_url: '',
+    function getListData() {
+      setLoading(true);
+      axios.get('/employee', { params: { keyword: filter.keyword, limit: tableData.limit, offset: tableData.offset} }).then((response) => {
+        setLoading(false);
+        setTableData({
+          limit: response.data.limit,
+          offset: response.data.offset,
+          current: tableData.current,
+          resource: response.data.data,
+          total: response.data.total
+        });
+      }).catch(() => {
+        setLoading(false);
       });
     }
+
+    useEffect(() => {
+      getListData();
+    }, []);
 
   return (
     <div>
@@ -87,14 +107,14 @@ function Employee() {
           <Input
             prefix={<SearchOutlined />}
             placeholder="Search"
-            // onChange={(val) => { setFilter({ keyword: val.target.value }) }}
-            // onPressEnter={() => getListData()}
+            onChange={(val) => { setFilter({ keyword: val.target.value }) }}
+            onPressEnter={() => getListData()}
           // suffix={<CloseCircleFilled />}
           ></Input>
         </Col>
             
         <Col span={1} offset={8}>
-          <Button className="btn-import" onClick={showModal} >
+          <Button className="btn-import" >
           <UploadOutlined />Import 
           </Button>
         </Col>
@@ -106,30 +126,33 @@ function Employee() {
         </Col>
 
         <Col span={1} offset={1}>
-          <Button className="btn-snow btn-sm" type="primary" >
+          <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
             <ReloadOutlined />
           </Button>
         </Col>
 
         <Col span={1} offset={1}>
-          <Button className="btn-user" type="primary">
+          <Button className="btn-user" type="primary" onClick={showModal}>
             Karyawan Baru <PlusOutlined />
           </Button>
         </Col>
         
       </Row>
 
-      <div>
-        <Table columns={columns} dataSource={data} />;
+      <div className="list">
+        <Spin spinning={loading}>
+          <Table columns={columns} dataSource={tableData.resource} size="small" pagination={false} />
+          <Pagination total={tableData.total} pageSize={tableData.limit} />
+        </Spin>
       </div>
 
       <Modal  
             footer={null} 
-            title="Import Karyawan" 
+            title="Karyawan" 
             visible={isModalVisible} 
             onOk={handleOk} 
             onCancel={handleCancel}>
-            <ImportKaryawan />
+            <EmployeeBaru />
           </Modal>
     </div>
   );

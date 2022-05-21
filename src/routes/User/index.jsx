@@ -159,7 +159,7 @@ function Pengguna() {
             placeholder="Search"
             onChange={(val) => { setFilter({ keyword: val.target.value }) }}
             onPressEnter={() => getListData()}
-          // suffix={<CloseCircleFilled />}
+            // suffix={<CloseCircleFilled />}
           ></Input>
         </Col>
 
