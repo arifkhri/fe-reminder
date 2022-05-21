@@ -2,7 +2,7 @@ aside {
   background-color: #F4F9FD !important;
 }
 
-aside > .ant-layout-sider-children {
+aside>.ant-layout-sider-children {
   padding: 1rem;
 }
 
@@ -12,9 +12,60 @@ aside > .ant-layout-sider-children {
   height: 100%;
 }
 
+.ant-menu-inline {
+  border-right: 0!important;
+}
+
+.ant-menu li {
+  color: #A6B0B9;
+  font-weight: 500;
+  padding: 0 15px!important;
+  cursor: default;
+}
+
+.ant-menu li:focus {
+  background: transparent!important;
+}
+.ant-menu li.active{
+  background: transparent!important;
+}
+
+.ant-menu li.active::after {
+  display: none;
+}
+
 .ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   height: 416px;
 }
-.menu-item::hover {
-  cursor: pointer!important;
+
+.menu-item {
+  color: #A6B0B9 ;
+}
+
+.menu-item:hover {
+  cursor: pointer ;
+  color: #A6B0B9 ;
+  background: #f7f7f7;
+  border-radius: 10px;
+}
+
+.active .menu-item {
+  color: #147EE3!important;
+  background: #E5F3FE;
+  border-radius: 10px;
+}
+
+/* .ant-menu-item.active .ant-menu-title-content {
+} */
+
+@media only screen and (max-width: 767px) {
+
+  .ant-layout-sider .ant-layout-sider-children {
+    padding: 0 !important;
+  }
+
+  .ant-layout-sider-zero-width-trigger {
+    right: -20px;
+    top: 10px;
+  }
 }

@@ -31,10 +31,10 @@ function Sidebar() {
           {
             menu.map((data) => {
               return (
-                <Menu.Item className="no-action" onClick={() => onClickNavItem(data.to)}>
-                  <div className="menu-item d-flex">
-                    <img src={`/images/${data.icon}.svg`} className="mr-2" alt={`img-${data.icon}`}/>
-                    <span>{data.title}</span>
+                <Menu.Item className={`no-action ${data.to === location.pathname && 'active'}`} onClick={() => onClickNavItem(data.to)}>
+                  <div className="menu-item d-flex px-3">
+                    <img src={`/images/${data.to === location.pathname ? data.iconActive : data.icon}.svg`} className="mr-2" alt={`img-${data.icon}`} />
+                    <span className="ml-2">{data.title}</span>
                   </div>
                 </Menu.Item>
               )

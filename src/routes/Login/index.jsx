@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Form,
+  Space,
   Input,
   Button,
   Checkbox,
@@ -9,7 +10,8 @@ import {
   Col,
   Modal,
   message,
-  Spin
+  Spin,
+  Layout
 } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -39,13 +41,13 @@ function Login() {
       cookie.set("user", JSON.stringify(response.data));
       dispatch({
         type: 'update',
-        value: response.data,        
+        value: response.data,
         name: 'userData',
       })
       navigate(from, { replace: true });
       setLoading(true);
 
-    }).catch(({response}) => {
+    }).catch(({ response }) => {
       setLoading(false);
       message.error(response.data);
     });
@@ -57,7 +59,7 @@ function Login() {
       <Spin spinning={loading}>
         <Card bordered={false}>
           <Row>
-            <Col xs={0} md={12} className="align-items-end col-illustration d-flex justify-content-center">
+            <Col xs={0} md={12} className="align-items-end col-illustration">
               <span className="copyright mb-4">2021 © Clodeo Reminder</span>
             </Col>
 
@@ -107,13 +109,14 @@ function Login() {
       </Spin>
 
       <Modal
+        width={'400px'}
         footer={null}
         title="Lupa Password"
         visible={isModalVisible}
         onOk={() => setIsModalVisible(true)}
         onCancel={() => setIsModalVisible(false)}
       >
-        <ForgotPassword afterSubmit={() => setIsModalVisible(false)}/>
+        <ForgotPassword afterSubmit={() => setIsModalVisible(false)} />
       </Modal>
     </div>
   );

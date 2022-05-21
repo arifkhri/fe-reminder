@@ -1,0 +1,33 @@
+.ant-switch {
+  width: 36px;
+  height: 20px;
+  background: #fff;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+}
+
+.ant-switch.ant-switch-checked {
+  background: #afdaff;
+}
+
+.ant-switch.ant-switch-checked .ant-switch-loading-icon {
+  color: #fff;
+}
+
+.ant-switch.ant-switch-checked .ant-switch-handle::before {
+  background: linear-gradient(225deg, #45a9ff 0%, #147ee3 100%);;
+}
+
+.ant-switch .ant-switch-handle {
+  top: 2px;
+  width: 16px;
+  height: 16px;
+}
+
+.ant-switch .ant-switch-handle::before {
+  background-color: #DEE4ED;
+}
+
+.ant-switch-small.ant-switch-checked .ant-switch-handle {
+  left: calc(100% - 19px);
+}

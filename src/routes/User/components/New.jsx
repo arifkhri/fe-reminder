@@ -20,14 +20,14 @@ function New(props) {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
-      
+
     }).catch(({ response }) => {
       message.error(response.data);
       setLoading(false);
     });
   }
 
-  function onCancel() { 
+  function onCancel() {
     props.afterSubmit();
   }
 
@@ -36,10 +36,13 @@ function New(props) {
       <Form onFinish={handleSubmit} form={form} layout="vertical">
         <FieldMain />
         <FieldPassword />
-        <Button onClick={onCancel}>Kembali</Button>
-        <Button type="primary" htmlType="submit">
-          Simpan
-        </Button>
+        
+        <div className="d-flex justify-content-center">
+          <Button onClick={onCancel}>Kembali</Button>
+          <Button type="primary" htmlType="submit">
+            Simpan
+          </Button>
+        </div>
       </Form>
     </Spin>
   );

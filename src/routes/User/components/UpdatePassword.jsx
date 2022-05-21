@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, Button, message, Spin } from "antd";
 
 import axios from "../../../core/helpers/axios";
@@ -13,10 +13,12 @@ function UpdatePassword(props) {
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
-    axios.put(`/user/${props.data.id}/password`, {new_password: formValues.confirmPassword}).then((response) => {
+
+    axios.put(`/user/${props.data.id}/password`, { new_password: formValues.confirmPassword }).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
+    
     }).catch(({ response }) => {
       message.error(response.data);
       setLoading(false);
@@ -31,10 +33,14 @@ function UpdatePassword(props) {
     <Spin spinning={loading}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <FieldPassword />
-        <Button onClick={onCancel}>Kembali</Button>
-        <Button type="primary" htmlType="submit">
-          Simpan
-        </Button>
+
+        <div className="d-flex justify-content-center">
+          <Button onClick={onCancel}>Kembali</Button>
+          <Button type="primary" htmlType="submit">
+            Simpan
+          </Button>
+        </div>
+
       </Form>
     </Spin>
   );

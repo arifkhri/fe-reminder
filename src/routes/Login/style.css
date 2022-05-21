@@ -1,9 +1,28 @@
-.login-page > .ant-card {
-  width: 880px!important;
+.login-page {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+@media only screen and (max-width: 767px) {
+  .login-page .ant-card {
+    width: 100%!important;
+  }
+  .col-illustration {
+    display: none!important;
+  }
+  .container-form {
+    width: 90vw;
+  }
+}
+
+.login-page .ant-card {
+  width: 880px;
   margin: auto;
 }
 
-.login-page > .ant-input {
+.login-page .ant-input {
   padding: 10px 16px;
 
 }
@@ -21,6 +40,8 @@
 }
 
 .col-illustration {
+  display: flex;
+  justify-content: center;
   border-radius: 30px;
   background-color: #E5F3FE;
   border-top-right-radius: 0px;
@@ -42,4 +63,39 @@
   padding: 9px 24.5px;
   width: 142px;
   height: 44px;
+}
+
+.login-page .ant-input, .login-page .ant-input-affix-wrapper {
+  align-items: center;
+  padding: 5px 13px;
+  width: 100%;
+  height: 45px;
+  background: #FFFFFF;
+  border: 1px solid #D8E0F0;
+  box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
+  border-radius: 10px;
+}
+
+.login-page .ant-input-password {
+  align-items: center;
+  padding: 10px 16px;
+  height: 45px;
+  width: 100%;
+  /* background: #FFFFFF;
+  border: 1px solid #D8E0F0; */
+  box-shadow: 0px 2px 5px rgb(90 122 163 / 6%);
+  border-radius: 10px;
+}
+
+.login-page .ant-input-password .ant-input{
+  height: 42px;
+}
+
+.login-page .ant-input-password > .ant-input {
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.login-page .hide-required-sign > .ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
+  display: none;
 }

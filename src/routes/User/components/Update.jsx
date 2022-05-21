@@ -13,10 +13,12 @@ function Update(props) {
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
+
     axios.put(`/user/${props.data.id}`, formValues).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
+      
     }).catch(({ response }) => {
       message.error(response.data);
       setLoading(false);
@@ -35,10 +37,13 @@ function Update(props) {
     <Spin spinning={loading}>
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <FieldMain />
-        <Button onClick={onCancel}>Kembali</Button>
-        <Button type="primary" htmlType="submit">
-          Simpan
-        </Button>
+
+        <div className="d-flex justify-content-center">
+          <Button onClick={onCancel}>Kembali</Button>
+          <Button type="primary" htmlType="submit">
+            Simpan
+          </Button>
+        </div>
       </Form>
     </Spin>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message } from "antd";
+import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message, Dropdown, Select } from "antd";
 import {
   ReloadOutlined,
   MenuOutlined,
@@ -15,13 +15,13 @@ import useLocalData from "../../hooks/useLocalData";
 import NewUser from "./components/New";
 import UpdateUser from "./components/Update";
 import UpdateUserPassword from "./components/UpdatePassword";
+
 import "./style.css";
 
-function Pengguna() {
+function User() {
   const { store } = useLocalData();
   const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
   const [filter, setFilter] = useState({ keyword: '' });
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [loading, setLoading] = useState(false);
   axios.config(store);
@@ -45,11 +45,13 @@ function Pengguna() {
     {
       title: "STATUS",
       key: "action",
+      align: "center",
       dataIndex: "is_active",
       render: (value, record) => <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>,
     },
     {
       title: "UPDATE",
+      align: "center",
       key: "action",
       render: (_, record) => (
         <Button
@@ -63,6 +65,7 @@ function Pengguna() {
     },
     {
       title: "PASSWORD",
+      align: "center",
       key: "action",
       render: (_, record) => (
         <Button
@@ -129,9 +132,11 @@ function Pengguna() {
     });
   }
 
-  function getListData() {
+  function getListData(changesFilter = {}) {
+    const { limit = null } = changesFilter;
+
     setLoading(true);
-    axios.get('/user', { params: { keyword: filter.keyword, limit: tableData.limit, offset: tableData.offset } }).then((response) => {
+    axios.get('/user', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: tableData.offset } }).then((response) => {
       setLoading(false);
       setTableData({
         limit: response.data.limit,
@@ -145,6 +150,9 @@ function Pengguna() {
     });
   }
 
+  function handleChangeLimit(val) {
+    getListData({ limit: val });
+  }
 
   useEffect(() => {
     getListData();
@@ -153,42 +161,68 @@ function Pengguna() {
   return (
     <div>
       <Row className="mb-4 mt-5 pt-2">
-        <Col className="search" span={4}>
-          <Input
-            prefix={<SearchOutlined />}
-            placeholder="Search"
-            onChange={(val) => { setFilter({ keyword: val.target.value }) }}
-            onPressEnter={() => getListData()}
-          // suffix={<CloseCircleFilled />}
-          ></Input>
+        <Col className="search" xs={24} md={12}>
+          <Col span={12}>
+            <Input
+              value={filter.keyword}
+              prefix={<SearchOutlined />}
+              placeholder="Search"
+              onChange={(val) => { setFilter({ keyword: val.target.value }) }}
+              onPressEnter={() => getListData()}
+              suffix={<CloseCircleFilled onClick={() => setFilter({ keyword: '' })} />}
+            />
+          </Col>
         </Col>
 
-        <Col span={2} offset={14}>
-          <Button className="btn-user" type="primary" onClick={showModal}>
-            Tambah User <PlusOutlined />
-          </Button>
-        </Col>
+        <Col xs={24} md={12} className="mt-md-0  mt-2">
+          <Row justify="end">
+            <Col>
+              <Button className="btn-user" type="primary" onClick={showModal}>
+                Tambah User <PlusOutlined />
+              </Button>
+            </Col>
 
-        <Col span={1} offset={1}>
-          <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
-            <ReloadOutlined />
-          </Button>
-        </Col>
+            <Col className="px-2">
+              <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
+                <ReloadOutlined />
+              </Button>
+            </Col>
 
-        <Col span={1}>
-          <Button className="btn-snow btn-sm" type="primary">
-            <MenuOutlined />
-          </Button>
+            <Col>
+              <Button className="btn-snow btn-sm" type="primary">
+                <MenuOutlined />
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
 
       <div className="list">
         <Spin spinning={loading}>
-          <Table columns={columns} dataSource={tableData.resource} size="small" pagination={false} />
-          <Pagination total={tableData.total} pageSize={tableData.limit} />
+          <Table scroll={true} columns={columns} dataSource={tableData.resource} size="small" pagination={false} />
+
+          <Row className="mt-2">
+            <Col xs={24} md={12}>
+              <div className="d-flex align-items-center">
+                <span className="d-flex align-items-center">
+                  <span className="mr-2">Menampilkan</span>
+                  <Select value={tableData.limit} onChange={handleChangeLimit}>
+                    <Select.Option value={10}>10</Select.Option>
+                    <Select.Option value={20}>20</Select.Option>
+                    <Select.Option value={30}>30</Select.Option>
+                  </Select>
+                </span>
+                <span className="px-2">|</span>
+                <span>Total {tableData.total} </span>
+              </div>
+            </Col>
+
+            <Col xs={24} md={12} className="mt-md-0 mt-2 d-flex justify-content-end">
+              <Pagination total={tableData.total} pageSize={tableData.limit} />
+            </Col>
+          </Row>
         </Spin>
       </div>
-
 
       <Modal
         footer={null}
@@ -203,4 +237,4 @@ function Pengguna() {
   );
 }
 
-export default Pengguna;
+export default User;

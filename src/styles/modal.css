@@ -1,0 +1,36 @@
+.ant-modal-content {
+  border-radius: 20px;
+}
+
+.ant-modal-header {
+  padding-top: 30px;
+  border-radius: 20px;
+  border: 0;
+}
+
+.ant-modal-title {
+  font-size: 20px;
+}
+
+.ant-modal-close {
+  top: 15px;
+}
+
+.ant-modal-close-icon {
+  font-size: 20px;
+}
+
+.ant-modal-confirm-content {
+  text-align: center;
+  margin: 35px 0  10px 0px!important;
+}
+
+.ant-modal-confirm-btns {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* .ant-modal-body {
+  padding-bottom: 1px
+} */

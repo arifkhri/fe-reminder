@@ -4,13 +4,12 @@ import { Form, Input, Button, message, Spin } from "antd";
 import validation from "../../../../core/helpers/validation";
 import axios from "../../../../core/helpers/axios";
 
-import "./style.css";
 
 const ForgotPassword = (props) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
+  function onFinish(values) {
     setLoading(true);
     axios.post('/forgot-password', values, true).then((response) => {
       setLoading(false);
@@ -22,6 +21,10 @@ const ForgotPassword = (props) => {
       message.error(response.data);
     });
   };
+
+  function onCancel() {
+    props.afterSubmit();
+  }
 
   return (
     <div className="forgot-password-component">
@@ -39,15 +42,15 @@ const ForgotPassword = (props) => {
             <Input placeholder="only-hr@clodeo.com" />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 6 }}>
-            <Button type="link" htmlType="button" onClick>
+          <div className="d-flex justify-content-center">
+            <Button type="link" htmlType="button" onClick={onCancel}>
               Kembali
             </Button>
 
-            <Button type="primary" htmlType="submit">
+            <Button className="btn-primary-gradient" type="primary" htmlType="submit">
               Kirim
             </Button>
-          </Form.Item>
+          </div>
         </Form>
       </Spin>
     </div>

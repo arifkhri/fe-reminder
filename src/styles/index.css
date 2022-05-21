@@ -1,8 +1,28 @@
 @import "bootstrap.css";
 @import "button.css";
 @import "form.css";
+@import "modal.css";
+@import "table.css";
+@import "switch.css";
+@import "select.css";
+@import "pagination.css";
 
 .link-action {
   color: #3F8CFF;
   cursor: pointer;
+}
+.pointer {
+  cursor: pointer;
+}
+
+/* LIST Style */
+
+/* input search */
+.search .ant-input-affix-wrapper {
+  border: 1px solid #EEF2F6;
+  box-shadow: none;
+}
+.search .ant-input {
+  height: 100%;
+  box-shadow: none;
 }

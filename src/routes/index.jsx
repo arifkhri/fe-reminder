@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate, useLocation } from "react-router-dom";
 
 import axios from "../core/helpers/axios";
 import cookie from "../core/helpers/cookie";
@@ -19,6 +19,7 @@ let isRequestingAuth = false;
 
 export default function App() {
   const { dispatch } = useLocalData();
+  const location = useLocation();
   const navigate = useNavigate();
 
   async function checkingLoggedIn() {
@@ -35,7 +36,7 @@ export default function App() {
             value: response.data,
             name: 'userData',
           });
-          navigate("/");
+          navigate(location.pathname || "/");
         }).catch(() => {
           cookie.del('user');
           dispatch({

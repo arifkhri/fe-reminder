@@ -1,17 +1,21 @@
 const menu  = [{
-  icon: 'calendar-reminder-icon',
+  iconActive: 'active-reminder-icon',
+  icon: 'reminder-icon',
   to: '/reminder',
   title: 'Reminder',
 }, {
-  icon: 'calendar-agenda-icon',
+  icon: 'agenda-icon',
+  iconActive: 'active-agenda-icon',
   to: '/agenda',
   title: 'Agenda',
 }, {
-  icon: 'calendar-employee-icon',
+  icon: 'employee-icon',
+  iconActive: 'active-employee-icon',
   to: '/employee',
   title: 'Karyawan',
 }, {
-  icon: 'calendar-user-icon',
+  icon: 'user-icon',
+  iconActive: 'active-user-icon',
   to: '/user',
   title: 'Pengguna',
 }];

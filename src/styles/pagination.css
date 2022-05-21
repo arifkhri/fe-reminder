@@ -1,0 +1,26 @@
+.ant-pagination .ant-pagination-item-link,
+.ant-pagination .ant-pagination-item {
+  min-width: 36px;
+  border: 0;
+}
+
+.ant-pagination {
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(90, 122, 163, 0.06);
+}
+
+.ant-pagination li,
+.ant-pagination a {
+  padding: 0;
+  margin: 0;
+}
+
+.ant-pagination li:first-child button {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.ant-pagination li:last-child button {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
