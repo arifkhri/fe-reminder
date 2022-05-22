@@ -23,7 +23,7 @@ const Import = (props) => {
       <Spin spinning={loading}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
-            className="hide-required-sign"
+            
             label="Lampiran"
             name="lampiran"
             rules={[validation.required("please input your lampiran")]}>

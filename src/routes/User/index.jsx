@@ -46,7 +46,7 @@ function User() {
       align: "center",
       dataIndex: "is_active",
       render: (value, record) => (
-        store?.userData?.email != record.email ?
+        store?.userData?.email !== record.email ?
           <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>
           : <></>
       )
@@ -56,7 +56,7 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-        store?.userData?.email != record.email ?
+        store?.userData?.email !== record.email ?
           <Button
             className="btn-sm btn-faint-primary"
             type=""
@@ -71,7 +71,7 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-        store?.userData?.email != record.email ?
+        store?.userData?.email !== record.email ?
           <Button
             className="btn-sm btn-faint-warning"
             type=""

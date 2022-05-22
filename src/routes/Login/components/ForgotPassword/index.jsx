@@ -35,10 +35,9 @@ const ForgotPassword = (props) => {
       <Spin spinning={loading}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
-            className="hide-required-sign"
             label="Email"
             name="email"
-            rules={[validation.required("please input your email"), validation.email()]}>
+            rules={[validation.required(), validation.email()]}>
             <Input placeholder="only-hr@clodeo.com" />
           </Form.Item>
 

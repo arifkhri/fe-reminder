@@ -16,9 +16,19 @@ function AgendaComplete(props) {
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
+    const payload = {
+      ids: props.agendaData.map((data) => data.id),
+      employee_ids: props.agendaData.map((data) => data.employee_id),
+      is_renew: false,
+      date: '',
+      remind_day: 0,
+      description: '',
+      ...formValues
+    }
+
     setLoading(true);
 
-    axios.put(`/agenda/${props.record.id}`, formValues).then((response) => {
+    axios.post(`/agenda/complete`, payload).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterActionModal();
@@ -35,28 +45,35 @@ function AgendaComplete(props) {
 
   return (
     <Spin spinning={loading}>
-      <Form onFinish={handleSubmit} form={form} layout="vertical" initialValues={{ isRemind: true }}>
+      <Form onFinish={handleSubmit} form={form} layout="vertical">
 
         <div className="wrapper-label-switch">
-          <Form.Item className="mb-3" name="isRemind" valuePropName="checked">
+          <Form.Item className="mb-3" name="is_renew" valuePropName="checked">
             <Switch />
           </Form.Item>
           <span className="ml-3">Agendakan kembali</span>
         </div>
 
-        <div className="bg-blue p-4 ">
-          <Form.Item label="Tanggal" name="date" rules={[validation.required()]}>
-            <DatePicker placeholder={null} value={dayjs('D MMMM YYYY')} format="D MMMM YYYY" />
-          </Form.Item>
+        <Form.Item shouldUpdate={(prevValues, curValues) => prevValues.is_renew !== curValues.is_renew}>
+          {({getFieldValue}) => {
+            return (
+              getFieldValue("is_renew") && 
+              <div className="bg-blue p-4 ">
+                <Form.Item label="Tanggal" name="date" rules={[validation.required()]}>
+                  <DatePicker placeholder={null} value={dayjs('D MMMM YYYY')} format="D MMMM YYYY" />
+                </Form.Item>
 
-          <Form.Item label="Ingatkan pada" name="remind_at" rules={[validation.required()]}>
-            <Input suffix="Hari sebelum" />
-          </Form.Item>
+                <Form.Item label="Ingatkan pada" name="remind_day" rules={[validation.required()]}>
+                  <Input type="number" suffix="Hari sebelum" />
+                </Form.Item>
 
-          <Form.Item className="mb-0" label="Keperluan" name="description" rules={[validation.required()]}>
-            <Input.TextArea rows={4} />
-          </Form.Item>
-        </div>
+                <Form.Item className="mb-0" label="Keperluan" name="description" rules={[validation.required()]}>
+                  <Input.TextArea rows={4} />
+                </Form.Item>
+              </div>
+            );
+          }}
+        </Form.Item>
 
 
         <div className="d-flex justify-content-center mt-4">

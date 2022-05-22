@@ -1,10 +1,10 @@
 
 const defaultMessage = {
-  required: "Field is required",
-  email: "Invalid email",
-  min: "min {0}",
-  max: "max {0}",
-  matchWith: "not same as"
+  required: "Field ini wajib diisi",
+  email: "Email tidak valid",
+  min: "Minimal karakter ",
+  max: "Maksimal karakter ",
+  matchWith: "Field tidak sama dengan "
 };
 
 const validation = {
@@ -32,23 +32,34 @@ const validation = {
    * Max validation.
    *
    * @param maxNumber - The number for benchmark
-   * @param message - The message for validation
+   * @param customMessage - The message for validation
    * @returns The max validation
   */
-  max: function (maxNumber, message) {
-    return { max: maxNumber, message };
+  max: function (maxNumber, customMessage) {
+    return { max: maxNumber, message: customMessage || `${defaultMessage['max'] + ' ' + maxNumber}`  };
   },
 
   /**
    * Min validation.
    *
    * @param minNumber - The number for benchmark
-   * @param message - The message for validation
+   * @param mecustomMessagessage - The message for validation
    * @returns The min validation
   */
-  min: function (minNumber, message) {
-    return { min: minNumber, message };
-  }
+  min: function (minNumber, customMessage) {
+    return { min: minNumber, message: customMessage || `${defaultMessage['min'] + ' ' + minNumber}`  };
+  },
+
+  matchWith: function ({ fieldName, message }) {
+    return ({ getFieldValue }) => ({
+      validator(_, value) {
+        if (!value || getFieldValue(fieldName) === value) {
+          return Promise.resolve();
+        }
+        return Promise.reject(new Error(message || `${defaultMessage['matchWith'] + ' ' + fieldName}`));
+      },
+    });
+  },
 
 }
 

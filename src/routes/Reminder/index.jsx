@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select } from "antd";
+
+import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message } from "antd";
 import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 
 import AgendaComplete from "./components/AgendaComplete"
@@ -102,8 +103,9 @@ function Reminder() {
       title: "",
       key: "action",
       dataIndex: "id",
-      render: (value) => (
-        <Button type="primary" className="btn-sm btn-faint-danger" onClick={() => handleReminder(value)}>
+      render: (value, record) => (
+        dayjs().isAfter(dayjs(record.remind_at).format("YYYY-MM-DD HH:mm:ss")) &&
+        <Button type="primary" className="btn-sm btn-faint-danger" onClick={() => handleReminder([value])}>
           <FieldTimeOutlined />
         </Button>
       ),
@@ -160,18 +162,31 @@ function Reminder() {
   }
 
   function reqReminder(ids) {
+    setLoading(true);
+    axios.post('/agenda/remind', {ids}).then((response) => {
+      setLoading(false);
+      message.success(response.data);
+      getListData();
+      
+    }).catch(({ response }) => {
+      message.error(response.data);
+      setLoading(false);
+    });
     console.log("🚀 ~ file: index.jsx ~ line 121 ~ reqReminder ~ ids", ids)
   }
 
   function showModal(type, record) {
     let tempModalData = {
-      content: <ShareReminder ids={record} afterActionModal={afterActionModal} />,
+      content: <ShareReminder agendaIds={record} afterActionModal={afterActionModal} />,
       title: "Bagikan Reminder",
       visible: true
     };
 
     if (type === "agendaComplete") {
-      tempModalData.content = <AgendaComplete data={record} afterActionModal={afterActionModal} />;
+      tempModalData.content = <AgendaComplete agendaData={[record]} afterActionModal={() => {
+        afterActionModal();
+        getListData();
+      }} />;
       tempModalData.title = "Agenda Selesai";
     }
 

@@ -9,7 +9,6 @@
     "antd": "^4.20.1",
     "axios": "^0.27.2",
     "dayjs": "^1.11.1",
-    "moment": "^2.29.3",
     "react": "^18.1.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.1.0",

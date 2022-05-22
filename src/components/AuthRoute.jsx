@@ -7,6 +7,7 @@ export function AuthRoute({ children }) {
   const { store } = useLocalData();
   
   let location = useLocation();
+  
 
   if (!store?.userData) {
     return <Navigate to="/login" state={{ from: location }} replace />;

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout, Row, Col, Space, Avatar, Dropdown, Menu } from 'antd';
 import { BellOutlined, DownOutlined } from '@ant-design/icons';
 
-// import Notifications from '../Notifications';
+import Notifications from '../Notifications';
 import useLocalData from '../../core/hooks/useLocalData';
 import cookie from '../../core/helpers/cookie';
 
@@ -65,14 +65,14 @@ export default function Header() {
             >
               <GlobalOutlined />
             </Dropdown> */}
-            {/* <Dropdown
+            <Dropdown
               className="px-2"
               overlay={<Notifications />}
               placement="bottomRight"
               trigger={['click']}
             >
               <BellOutlined />
-            </Dropdown> */}
+            </Dropdown>
             <Dropdown
               overlay={<Menu
                 items={[

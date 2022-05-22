@@ -60,7 +60,7 @@ function Login() {
         <Card bordered={false}>
           <Row>
             <Col xs={0} md={12} className="align-items-end col-illustration">
-              <span className="copyright mb-4">2021 © Clodeo Reminder</span>
+              <span className="copyright mb-4">2022 © Clodeo Reminder</span>
             </Col>
 
             <Col xs={24} md={12} className="container-form">
@@ -73,11 +73,11 @@ function Login() {
               </center>
 
               <Form form={form} onFinish={handleSubmit} layout="vertical" name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} initialValues={{ remember: true }} autoComplete="off">
-                <Form.Item className="hide-required-sign" wrapperCol={24} label="Email" name="email" rules={[validation.required(), validation.email()]}>
+                <Form.Item wrapperCol={24} label="Email" name="email" rules={[validation.required(), validation.email()]}>
                   <Input className="txtemail" placeholder="only-hr@clodeo.com" />
                 </Form.Item>
 
-                <Form.Item className="hide-required-sign" labelCol={5} wrapperCol={24} label="Password" name="password" rules={[validation.required()]}>
+                <Form.Item labelCol={5} wrapperCol={24} label="Password" name="password" rules={[validation.required()]}>
                   <Input.Password placeholder="*********" />
                 </Form.Item>
 

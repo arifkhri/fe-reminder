@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button, message, Spin, Select, Tag as BaseTag } from "antd";
+import { Form, Button, message, Modal, Spin, Select, Tag as BaseTag } from "antd";
 
 import axios from "../../../core/helpers/axios";
 import useLocalData from "../../../core/hooks/useLocalData";
 import { debounce } from '../../../core/utils';
+import validation from "../../../core/helpers/validation";
 
 function Tag(props) {
   const { label } = props;
@@ -17,7 +18,6 @@ function Tag(props) {
     <BaseTag
       color="blue"
       onMouseDown={onPreventMouseDown}
-      closable={true}
     >
       {label}
     </BaseTag>
@@ -29,6 +29,8 @@ function ShareReminder(props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [loadingSelect, setLoadingSelect] = useState(false);
+  const [values, setValues] = useState([]);
+  const [employeeData, setEmployeeData] = useState([]);
   const [options, setOptions] = useState([]);
   axios.config(store);
 
@@ -44,7 +46,7 @@ function ShareReminder(props) {
           });
         });
         setOptions(newResponse);
-
+        setEmployeeData(response.data?.data || []);
         setLoadingSelect(false);
 
       }).catch(() => {
@@ -55,21 +57,33 @@ function ShareReminder(props) {
   }
 
   function handleSubmit() {
-    const formValues = form.getFieldsValue(true);
-    const { employee } = formValues;
+    const config = {
+      title: "Konfirmasi",
+      content: `Apakah anda yakin membagikan pengingat ini?`,
+      onOk: () => {
+        reqShareReminder();
+      }
+    };
+
+    Modal.confirm(config);
+  }
+
+  function reqShareReminder() {
+    const payload = {
+      emails: values.map((data) => data.email),
+      agenda_ids: props.agendaIds
+    };
     
-    console.log("🚀 ~ file: ShareReminder.jsx ~ line 59 ~ handleSubmit ~ formValues", formValues)
-    // setLoading(true);
-
-    // axios.post('/agenda/share', formValues).then((response) => {
-    //   setLoading(false);
-    //   message.success(response.data);
-    //   props.afterActionModal();
-
-    // }).catch(({ response }) => {
-    //   message.error(response.data);
-    //   setLoading(false);
-    // });
+    setLoading(true);
+    axios.post('/agenda/share', payload).then((response) => {
+      setLoading(false);
+      message.success(response.data);
+      props.afterActionModal();
+      
+    }).catch(({ response }) => {
+      message.error(response.data);
+      setLoading(false);
+    });
   }
 
   function onCancel() {
@@ -82,13 +96,33 @@ function ShareReminder(props) {
     }
   }
 
+  function onChangeEmployeeSelect(value, from) {
+
+    let employee = values;
+    if(from === 'select') {
+      employeeData.forEach((data) => {
+        if(data.full_name === value) {
+          employee.push(data);
+        }
+      });
+      setValues(employee);
+
+    } else {
+
+      employee = employee.filter((data) => data.full_name !== value); 
+      setValues(employee);
+    }
+  }
+
   return (
     <Spin spinning={loading}>
       <Form onFinish={handleSubmit} form={form} layout="vertical">
         <p> Reminder ini akan dibagikan melalui email, silahkan pilih karyawan yang akan menerimanya.</p>
         <Spin spinning={loadingSelect}>
-          <Form.Item name="employee" label="Karyawan">
+          <Form.Item name="employee" label="Karyawan" rules={[validation.required()]}>
             <Select
+              onSelect={(value) => onChangeEmployeeSelect(value, 'select')}
+              onDeselect={(value) => onChangeEmployeeSelect(value, 'deselect')}
               onFocus={onFocusEmployeeSelect}
               onSearch={searchEmployee}
               mode="multiple"

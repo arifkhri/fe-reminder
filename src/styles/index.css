@@ -1,5 +1,9 @@
-@import "components";
 @import "vendor";
+@import "components";
+
+body {
+  background-color: #F4F9FD;
+}
 
 .link-action {
   color: #3F8CFF;

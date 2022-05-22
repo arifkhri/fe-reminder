@@ -13,6 +13,7 @@ const Employee = React.lazy(() => import("./Employee"));
 const User = React.lazy(() => import("./User"));
 const Reminder = React.lazy(() => import("./Reminder"));
 const Login = React.lazy(() => import("./Login"));
+const ResetPassword = React.lazy(() => import("./ResetPassword"));
 const NoMatch = React.lazy(() => import("./NoMatch"));
 
 let isRequestingAuth = false;
@@ -67,6 +68,14 @@ export default function App() {
           element={
             <React.Suspense fallback={<Loading />}>
               <Login />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <React.Suspense fallback={<Loading />}>
+              <ResetPassword />
             </React.Suspense>
           }
         />

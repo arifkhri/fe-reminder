@@ -158,7 +158,7 @@ function Employee() {
 
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
-            {/* <Col className="px-2">
+            <Col className="px-2">
               <Button className="btn-snow-success" >
                 <UploadOutlined />Import
               </Button>
@@ -168,7 +168,7 @@ function Employee() {
               <Button className="btn-snow-danger" type="primary" onClick={showModal}>
                 <UploadOutlined />Export
               </Button>
-            </Col> */}
+            </Col>
 
             <Col className="pl-2 pr-4 mr-4 border-right">
               <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
