@@ -18,7 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import cookie from '../../core/helpers/cookie';
 import axios from '../../core/helpers/axios';
-import useLocalData from '../../hooks/useLocalData';
+import useLocalData from '../../core/hooks/useLocalData';
 import validation from "../../core/helpers/validation";
 import ForgotPassword from "./components/ForgotPassword";
 
@@ -83,7 +83,7 @@ function Login() {
 
                 <Row gutter={2}>
                   <Col span={12}>
-                    <Form.Item name="remember">
+                    <Form.Item name="remember" valuePropName="checked">
                       <Checkbox>Ingat saya </Checkbox>
                     </Form.Item>
                   </Col>

@@ -4,6 +4,9 @@
   line-height: 0!important;
   padding: 10px 15px 0 15px!important;
 }
+.ant-layout-header .title {
+  font-size: 22px;
+}
 
 .avatar-group {
   background: #fff;

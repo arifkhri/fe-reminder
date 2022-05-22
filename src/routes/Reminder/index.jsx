@@ -1,51 +1,30 @@
 import React, { useEffect, useState } from "react";
-import dayjs from 'dayjs';
-import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message, Select } from "antd";
-import {
-  EditOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-  ReloadOutlined,
-  UploadOutlined,
-  ControlOutlined,
-  CloseCircleFilled
-} from "@ant-design/icons";
+import dayjs from "dayjs";
+import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select } from "antd";
+import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 
+import AgendaComplete from "./components/AgendaComplete"
+import ShareReminder from "./components/ShareReminder"
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
-import CreateAgenda from "./components/New";
 
-function Agenda() {
+function Reminder() {
   const { store, dispatch } = useLocalData();
+  const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
+  const [filter, setFilter] = useState({ keyword: '' });
+  const [modalData, setModalData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState({ keyword: "" });
-  const [isModalVisible, setIsModalVisible] = useState(false);
   axios.config(store);
-  const [tableData, setTableData] = useState({
-    offset: 0,
-    limit: 10,
-    resource: [],
-    current: 0,
-    total: 0,
-  });
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   const columns = [
     {
-      title: "NAMA",
-      align: "center",
+      title: "",
+      dataIndex: "employee_picture_url",
+      key: "picture",
+      render: (value) => <img src={value || "images/employee-default.png"} alt="employee" />
+    },
+    {
+      title: "",
       dataIndex: "employee",
       key: "employee",
       render: (_, record) => {
@@ -58,8 +37,7 @@ function Agenda() {
       }
     },
     {
-      title: "JABATAN",
-      align: "center",
+      title: "",
       dataIndex: "position",
       key: "position",
       render: (_, record) => {
@@ -72,96 +50,88 @@ function Agenda() {
       }
     },
     {
-      title: "TANGGAL",
-      align: "center",
+      title: "",
       dataIndex: "date",
       key: "date",
       render: (_, record) => {
-        return (dayjs(record.date).format("D MMMM YYYY HH:mm"))
+        return (
+          <div className="d-flex d-flex align-items-center flex-column">
+            <span className="desc-value">Tanggal</span>
+            <span className="value">{dayjs(record.date).format("D MMMM YYYY HH:mm")}</span>
+          </div>
+        )
       }
     },
     {
-      title: "KEPERLUAN",
+      title: "",
       dataIndex: "description",
       key: "description",
+      render: (_, record) => {
+        return (
+          <div className="d-flex d-flex align-items-center flex-column">
+            <span className="desc-value">Keperluan</span>
+            <span className="value">{record.description}</span>
+          </div>
+        )
+      }
     },
     {
-      title: "PENGINGAT",
+      title: "",
       dataIndex: "remind_at",
       key: "remind_at",
-    },
-    {
-      title: "STATUS",
-      key: "action",
-      dataIndex: "is_active",
-      render: (value, record) => (
-        store?.userData?.email != record.email ?
-          <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>
-          : <></>
-      )
+      render: (_, record) => {
+        return (
+          <div className="d-flex d-flex align-items-center flex-column">
+            <span className="desc-value">Tanggal Diingatkan</span>
+            <span className="value">{dayjs(record.remind_at).format("D MMMM YYYY HH:mm")}</span>
+          </div>
+        )
+      }
     },
     {
       title: "",
       key: "action",
-      dataIndex: "edit",
-      render: (text, record) => (
-        <Button type="primary" className="btn-faint-primary">
-          <EditOutlined />
+      dataIndex: "id",
+      render: (_, record) => (
+        <Button type="primary" className="btn-sm btn-faint-primary" onClick={() => showModal('agendaComplete', record)}>
+          <CheckOutlined />
         </Button>
       ),
     },
     {
       title: "",
       key: "action",
-      dataIndex: "edit",
-      render: (text, record) => (
-        <Button type="primary" className="btn-faint-danger">
-          <DeleteOutlined />
+      dataIndex: "id",
+      render: (value) => (
+        <Button type="primary" className="btn-sm btn-faint-danger" onClick={() => handleReminder(value)}>
+          <FieldTimeOutlined />
+        </Button>
+      ),
+    }
+    , {
+      title: "",
+      key: "action",
+      dataIndex: "id",
+      render: (value) => (
+        <Button type="primary" className="btn-sm btn-faint-purple" onClick={() => showModal('shareReminder', [value])}>
+          <ShareAltOutlined />
         </Button>
       ),
     },
   ];
 
-  function handleChangeStatus(data) {
-    const config = {
-      title: "Konfirmasi",
-      content: `Apakah anda yakin ${data.is_active ? 'menonaktifkan' : 'mengaktifkan'} agenda ini?`,
-      onOk: () => {
-        updateStatus(data);
-      }
-    };
-
-    Modal.confirm(config);
-  }
-
-  function updateStatus(data) {
-    setLoading(true);
-
-    axios.put(`/agenda/${data.id}/active`, { is_active: !data.is_active }).then((response) => {
-      getListData();
-      message.success(response.data)
-
-    }).catch(({ response }) => {
-      message.error(response.data)
-      setLoading(false);
-    });
-  }
-
-  function handleChangeLimit(val) {
-    getListData({ limit: val });
-  }
-
   function getListData(changesFilter = {}) {
     const { limit = null } = changesFilter;
+
     setLoading(true);
-    axios
-      .get("/agenda", {
-        params: {
-          keyword: filter.keyword,
-          limit: limit || tableData.limit,
-          offset: tableData.offset,
-        },
-      })
+    axios.get("/agenda", {
+      params: {
+        isActive: true,
+        keyword: filter.keyword,
+        limit: limit || tableData.limit,
+        offset: tableData.offset,
+      },
+    })
       .then((response) => {
         setLoading(false);
         setTableData({
@@ -177,19 +147,57 @@ function Agenda() {
       });
   }
 
+  function handleReminder(ids) {
+    const config = {
+      title: "Konfirmasi",
+      content: `Anda akan diingatkan kembali besok, yakin untuk melanjutkan?`,
+      onOk: () => {
+        reqReminder(ids);
+      }
+    };
+
+    Modal.confirm(config);
+  }
+
+  function reqReminder(ids) {
+    console.log("🚀 ~ file: index.jsx ~ line 121 ~ reqReminder ~ ids", ids)
+  }
+
+  function showModal(type, record) {
+    let tempModalData = {
+      content: <ShareReminder ids={record} afterActionModal={afterActionModal} />,
+      title: "Bagikan Reminder",
+      visible: true
+    };
+
+    if (type === "agendaComplete") {
+      tempModalData.content = <AgendaComplete data={record} afterActionModal={afterActionModal} />;
+      tempModalData.title = "Agenda Selesai";
+    }
+
+    setModalData(tempModalData);
+  }
+
+  function afterActionModal() {
+    setModalData({ visible: false });
+  }
+
+  function handleChangeLimit(val) {
+    getListData({ limit: val });
+  }
+
   useEffect(() => {
     dispatch({
       type: 'update',
       name: 'headerTitle',
-      value: 'Agenda'
+      value: 'Reminder'
     });
-
 
     getListData();
   }, []);
 
   return (
-    <div>
+    <>
       <Row className="mb-4 mt-5 pt-2">
         <Col className="search" xs={24} md={12}>
           <Row justify="start">
@@ -211,41 +219,23 @@ function Agenda() {
               </Button>
             </Col>
           </Row>
+
         </Col>
 
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
-            {/* <Col className="px-2">
-              <Button className="btn-snow-success" >
-                <UploadOutlined />Import
-              </Button>
-            </Col>
-
-            <Col>
-              <Button className="btn-snow-danger" type="primary" onClick={showModal}>
-                <UploadOutlined />Export
+            {/* <Col>
+              <Button className="btn-snow-danger" type="primary">
+                <UploadOutlined />
+                Export
               </Button>
             </Col> */}
 
-            <Col className="pl-2 pr-4 mr-4 border-right">
+            <Col className="px-2">
               <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
                 <ReloadOutlined />
               </Button>
             </Col>
-
-            <Col>
-              <Button className="btn-user" type="primary" onClick={showModal}>
-                Agenda Baru <PlusOutlined />
-              </Button>
-            </Col>
-
-
-
-            {/* <Col>
-              <Button className="btn-snow btn-sm" type="primary">
-                <MenuOutlined />
-              </Button>
-            </Col> */}
           </Row>
         </Col>
       </Row>
@@ -283,16 +273,17 @@ function Agenda() {
       </div>
 
       <Modal
-        title="Agenda Baru"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
         footer={null}
+        title={modalData?.title}
+        visible={modalData?.visible}
+        onCancel={() => {
+          setModalData({ visible: false });
+        }}
       >
-        <CreateAgenda />
+        {modalData?.content}
       </Modal>
-    </div>
+    </>
   );
 }
 
-export default Agenda;
+export default Reminder;

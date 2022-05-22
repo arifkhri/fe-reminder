@@ -1,9 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
-import cookie from "../core/helpers/cookie";
-import axios from "../core/helpers/axios";
-import useLocalData from "../hooks/useLocalData";
+import useLocalData from "../core/hooks/useLocalData";
 
 export function AuthRoute({ children }) {
   const { store } = useLocalData();

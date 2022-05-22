@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 
 import validation from "../../../core/helpers/validation";
 
-function FieldMain() {
+function FieldPassword() {
   return (
     <>
       <Form.Item
@@ -11,17 +11,17 @@ function FieldMain() {
         label="Password"
         rules={[validation.required()]}
       >
-        <Input />
+        <Input.Password />
       </Form.Item>
       <Form.Item
         name={"confirmPassword"}
         label="Konfirmasi Password"
         rules={[validation.required()]}
       >
-        <Input />
+        <Input.Password />
       </Form.Item>
     </>
   );
 }
 
-export default FieldMain;
+export default FieldPassword;

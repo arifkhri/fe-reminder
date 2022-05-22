@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { Layout as BaseLayout } from "antd";
 
-import useLocalData from '../../hooks/useLocalData';
+import useLocalData from '../../core/hooks/useLocalData';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 

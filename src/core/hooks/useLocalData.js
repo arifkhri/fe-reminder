@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { LocalDataContext } from '../core/context';
+import { LocalDataContext } from '../context';
 
 const useLocalData = () => useContext(LocalDataContext);
 

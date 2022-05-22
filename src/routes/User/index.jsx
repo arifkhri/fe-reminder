@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message, Dropdown, Select } from "antd";
+import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message, Select } from "antd";
 import {
   ReloadOutlined,
   MenuOutlined,
@@ -11,15 +11,13 @@ import {
 } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
-import useLocalData from "../../hooks/useLocalData";
+import useLocalData from "../../core/hooks/useLocalData";
 import NewUser from "./components/New";
 import UpdateUser from "./components/Update";
 import UpdateUserPassword from "./components/UpdatePassword";
 
-import "./style.css";
-
 function User() {
-  const { store } = useLocalData();
+  const { store, dispatch } = useLocalData();
   const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
   const [filter, setFilter] = useState({ keyword: '' });
   const [modalData, setModalData] = useState(null);
@@ -47,20 +45,25 @@ function User() {
       key: "action",
       align: "center",
       dataIndex: "is_active",
-      render: (value, record) => <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>,
+      render: (value, record) => (
+        store?.userData?.email != record.email ?
+          <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>
+          : <></>
+      )
     },
     {
       title: "UPDATE",
       align: "center",
       key: "action",
       render: (_, record) => (
-        <Button
-          className="btn-sm btn-faint-primary"
-          type=""
-          onClick={() => showModal("updateUser", record)}
-        >
-          <EditOutlined />
-        </Button>
+        store?.userData?.email != record.email ?
+          <Button
+            className="btn-sm btn-faint-primary"
+            type=""
+            onClick={() => showModal("updateUser", record)}
+          >
+            <EditOutlined />
+          </Button> : <></>
       ),
     },
     {
@@ -68,13 +71,14 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-        <Button
-          className="btn-sm btn-faint-warning"
-          type=""
-          onClick={() => showModal("updatePassword", record)}
-        >
-          <LockOutlined />
-        </Button>
+        store?.userData?.email != record.email ?
+          <Button
+            className="btn-sm btn-faint-warning"
+            type=""
+            onClick={() => showModal("updatePassword", record)}
+          >
+            <LockOutlined />
+          </Button> : <></>
       ),
     },
   ];
@@ -155,18 +159,24 @@ function User() {
   }
 
   useEffect(() => {
+    dispatch({
+      type: 'update',
+      name: 'headerTitle',
+      value: 'Pengguna'
+    });
+
     getListData();
   }, []);
 
   return (
-    <div>
+    <>
       <Row className="mb-4 mt-5 pt-2">
         <Col className="search" xs={24} md={12}>
           <Col span={12}>
             <Input
               value={filter.keyword}
               prefix={<SearchOutlined />}
-              placeholder="Search"
+              placeholder="Cari"
               onChange={(val) => { setFilter({ keyword: val.target.value }) }}
               onPressEnter={() => getListData()}
               suffix={<CloseCircleFilled onClick={() => setFilter({ keyword: '' })} />}
@@ -188,11 +198,11 @@ function User() {
               </Button>
             </Col>
 
-            <Col>
+            {/* <Col>
               <Button className="btn-snow btn-sm" type="primary">
                 <MenuOutlined />
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </Col>
       </Row>
@@ -233,7 +243,7 @@ function User() {
         {modalData?.content}
       </Modal>
 
-    </div>
+    </>
   );
 }
 

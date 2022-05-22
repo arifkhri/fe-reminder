@@ -3,7 +3,7 @@ import { Route, Routes, Navigate, useNavigate, useLocation } from "react-router-
 
 import axios from "../core/helpers/axios";
 import cookie from "../core/helpers/cookie";
-import useLocalData from "../hooks/useLocalData";
+import useLocalData from "../core/hooks/useLocalData";
 import { AuthRoute } from "../components/AuthRoute";
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';

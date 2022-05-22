@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Button, message, Spin } from "antd";
 
 import axios from "../../../core/helpers/axios";
-import useLocalData from "../../../hooks/useLocalData";
+import useLocalData from "../../../core/hooks/useLocalData";
 import FieldMain from "./FieldMain";
 
 function Update(props) {

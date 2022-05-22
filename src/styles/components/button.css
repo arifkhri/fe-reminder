@@ -2,6 +2,7 @@
   border-radius: 8px;
   min-width: 36px;
   border: 0;
+  height: 36px;
   padding: 5px 20px;
   box-shadow: none;
 }
@@ -25,6 +26,11 @@
 .ant-btn.btn-faint-primary {
   background: #E5F3FE;
   color: #147EE3;
+}
+
+.ant-btn.btn-faint-purple {
+  background: #F1E7FF;
+  color: #9063CD;
 }
 
 .ant-btn.btn-faint-danger {

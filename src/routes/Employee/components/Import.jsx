@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message, Spin } from "antd";
 
-import validation from "../../../../core/helpers/validation";
+import validation from "../../../core/helpers/validation";
 // import axios from "../../../../core/helpers/axios";
 
 // import "./style.css";
 
-const ImportKaryawan = (props) => {
+const Import = (props) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -30,7 +30,7 @@ const ImportKaryawan = (props) => {
             <Input  />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 6 }}>
+          <div className="d-flex justify-content-center">
             <Button type="link" htmlType="button" onClick>
               Kembali
             </Button>
@@ -38,11 +38,11 @@ const ImportKaryawan = (props) => {
             <Button type="primary" htmlType="submit">
               Import
             </Button>
-          </Form.Item>
+          </div>
         </Form>
       </Spin>
     </div>
   );
 };
 
-export default ImportKaryawan;
+export default Import;

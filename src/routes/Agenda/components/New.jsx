@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message, Row, Col, DatePicker } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 
-import validation from "../../../../core/helpers/validation";
-import axios from "../../../../core/helpers/axios";
-import useLocalData from "../../../../hooks/useLocalData";
+import validation from "../../../core/helpers/validation";
+import axios from "../../../core/helpers/axios";
+import useLocalData from "../../../core/hooks/useLocalData";
 
-const CreateAgenda = (props) => {
+const New = (props) => {
   const { store } = useLocalData();
   const [loading, setLoading] = useState(null);
   axios.config(store);
@@ -60,7 +60,8 @@ const CreateAgenda = (props) => {
             rules={[validation.required()]}
           >
             <DatePicker
-              value={moment("D MMMM YYYY", dateFormat)}
+              placeholder=""
+              value={dayjs("D MMMM YYYY", dateFormat)}
               format={dateFormat}
             />
           </Form.Item>
@@ -73,7 +74,8 @@ const CreateAgenda = (props) => {
             rules={[validation.required()]}
           >
             <DatePicker
-              value={moment("D MMMM YYYY", dateFormat)}
+              placeholder=""
+              value={dayjs("D MMMM YYYY", dateFormat)}
               format={dateFormat}
             />
           </Form.Item>
@@ -86,19 +88,22 @@ const CreateAgenda = (props) => {
             name={"description"}
             rules={[validation.required()]}
           >
-            <Input />
+            <Input.TextArea rows={4} />
           </Form.Item>
         </Col>
       </Row>
-      <Button type="" htmlType="button" onClick={onCancel}>
-        Kembali
-      </Button>
 
-      <Button type="primary" htmlType="submit">
-        Kirim
-      </Button>
+      <div className="d-flex justify-content-center">
+        <Button type="" htmlType="button" onClick={onCancel}>
+          Kembali
+        </Button>
+
+        <Button type="primary" htmlType="submit">
+          Kirim
+        </Button>
+      </div>
     </Form>
   );
 };
 
-export default CreateAgenda;
+export default New;

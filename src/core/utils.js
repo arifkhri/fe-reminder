@@ -131,3 +131,29 @@ export const isEmptyObject = (object) => {
     && Object.keys(object).length === 0
     && Object.getPrototypeOf(object) === Object.prototype
 }
+
+let debounceTimeout;
+export const debounce = (func, timeout, options) => {
+  const { leading = false, trailing = true } = options || {};
+  if (debounceTimeout) {
+    if (!leading && !trailing) {
+      func();
+    }
+
+    if (!trailing) {
+      return;
+    }
+
+    clearTimeout(debounceTimeout);
+    debounceTimeout = undefined;
+  }
+
+  if (leading && !debounceTimeout) {
+    func();
+  }
+
+  debounceTimeout = setTimeout(trailing ? func : () => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = undefined;
+  }, timeout);
+};
