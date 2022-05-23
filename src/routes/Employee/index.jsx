@@ -15,27 +15,15 @@ import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
 import ImportEmployee from "./components/Import";
 import NewEmployee from "./components/New";
+import FilterEmployee from "./components/Filter";
 
 function Employee() {
   const { store, dispatch } = useLocalData();
   const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
   const [filter, setFilter] = useState({ keyword: '' });
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModalData] = useState(null);
   const [loading, setLoading] = useState(false);
   axios.config(store);
-
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   const columns = [
     {
@@ -97,6 +85,34 @@ function Employee() {
     },
   ];
 
+  const showModal = (type, record) => {
+    let tempModalData = {
+      content: <NewEmployee afterSubmit={() => afterSubmitUser()} />,
+      title: "Karyawan",
+      visible: true,
+      onCancel: () => {
+        setModalData({ visible: false });
+      }
+    };
+
+    if (type === "import") {
+      tempModalData.content = <ImportEmployee data={record} afterSubmit={() => afterSubmitUser()} />;
+      tempModalData.title = "Import Karyawan";
+    }
+
+    if (type === "filter") {
+      tempModalData.content = <FilterEmployee  data={record} afterSubmit={() => afterSubmitUser()} />;
+      tempModalData.title = "Filter Karyawan";
+    }
+
+    setModalData(tempModalData);
+  };
+
+  function afterSubmitUser() {
+    getListData();
+    setModalData({ visible: false });
+  }
+
 
   function handleChangeLimit(val) {
     getListData({ limit: val });
@@ -149,7 +165,7 @@ function Employee() {
             </Col>
 
             <Col>
-              <Button className="btn-snow btn-sm ml-3" type="primary">
+              <Button className="btn-snow btn-sm ml-3" type="primary" onClick={() => showModal("filter")} >
                 <ControlOutlined />
               </Button>
             </Col>
@@ -159,7 +175,7 @@ function Employee() {
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
             <Col className="px-2">
-              <Button className="btn-snow-success" >
+              <Button className="btn-snow-success" type="primary"  onClick={() => showModal("import")}>
                 <UploadOutlined />Import
               </Button>
             </Col>
@@ -220,13 +236,13 @@ function Employee() {
         </Spin>
       </div>
 
-      <Modal
+       <Modal
         footer={null}
-        title="Karyawan"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}>
-        <NewEmployee />
+        title={modalData?.title}
+        visible={modalData?.visible}
+        onCancel={modalData?.onCancel}
+      >
+        {modalData?.content}
       </Modal>
     </div>
   );

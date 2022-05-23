@@ -21,6 +21,7 @@ import useLocalData from "../../../core/hooks/useLocalData";
 function New() {
   const { store } = useLocalData();
   const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
   const [modalData, setModalData] = useState(null);
   const [form] = Form.useForm();
   axios.config(store);
@@ -31,10 +32,10 @@ function New() {
   //   };
 
   function handleSubmit() {
-    const formValues = form.getFieldsValue(true);
+    const { limit = null } = handleSubmit;
     setLoading(true);
 
-    axios.post('/employee', formValues).then((response) => {
+    axios.post('/employee', { params: {limit: limit || tableData.limit, offset: tableData.offset } }).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
