@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
-import dayjs from 'dayjs';
-import { Modal, Switch, Col, Row, Pagination, Input, Button, Table, Spin, message, Select } from "antd";
+import dayjs from "dayjs";
+import {
+  Modal,
+  Switch,
+  Col,
+  Row,
+  Pagination,
+  Input,
+  Button,
+  Table,
+  Spin,
+  message,
+  Select,
+} from "antd";
 import {
   EditOutlined,
   PlusOutlined,
@@ -9,17 +21,21 @@ import {
   ReloadOutlined,
   UploadOutlined,
   ControlOutlined,
-  CloseCircleFilled
+  CloseCircleFilled,
 } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
 import CreateAgenda from "./components/New";
+import Import from "./components/Import";
+import Filter from "./components/Filter";
+import Delete from "./components/Delete";
 
 function Agenda() {
   const { store, dispatch } = useLocalData();
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({ keyword: "" });
+  const [modalData, setModalData] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   axios.config(store);
   const [tableData, setTableData] = useState({
@@ -30,9 +46,44 @@ function Agenda() {
     total: 0,
   });
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const showModal = (type, record) => {
+    let tempModalData = {
+      content: <CreateAgenda afterSubmit={() => afterSubmitUser()} />,
+      title: "Create Agenda",
+      visible: true,
+      onCancel: () => {
+        setModalData({ visible: false });
+      },
+    };
+
+    if (type === "Import") {
+      tempModalData.content = (
+        <Import data={record} afterSubmit={() => afterSubmitUser()} />
+      );
+      tempModalData.title = "Import Reminder";
+    }
+
+    if (type === "Filter") {
+      tempModalData.content = (
+        <Filter data={record} afterSubmit={() => afterSubmitUser()} />
+      );
+      tempModalData.title = "Filter Agenda";
+    }
+
+    if (type === "Delete") {
+      tempModalData.content = (
+        <Delete data={record} afterSubmit={() => afterSubmitUser()} />
+      );
+      tempModalData.title = "Hapus Agenda";
+    }
+
+    setModalData(tempModalData);
   };
+
+  function afterSubmitUser() {
+    getListData();
+    setModalData({ visible: false });
+  }
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -52,10 +103,10 @@ function Agenda() {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
             <span className="value">{record.employee}</span>
-            <span className="desc-value">{record.nik || '-'}</span>
+            <span className="desc-value">{record.nik || "-"}</span>
           </div>
-        )
-      }
+        );
+      },
     },
     {
       title: "JABATAN",
@@ -68,8 +119,8 @@ function Agenda() {
             <span className="value">{record.position}</span>
             <span className="desc-value">{record.department}</span>
           </div>
-        )
-      }
+        );
+      },
     },
     {
       title: "TANGGAL",
@@ -77,8 +128,8 @@ function Agenda() {
       dataIndex: "date",
       key: "date",
       render: (_, record) => {
-        return (dayjs(record.date).format("D MMMM YYYY HH:mm"))
-      }
+        return dayjs(record.date).format("D MMMM YYYY HH:mm");
+      },
     },
     {
       title: "KEPERLUAN",
@@ -89,16 +140,24 @@ function Agenda() {
       title: "PENGINGAT",
       dataIndex: "remind_at",
       key: "remind_at",
+      render: (_, record) => {
+        return dayjs(record.remind_at).format("D MMMM YYYY HH:mm");
+      },
     },
     {
       title: "STATUS",
       key: "action",
       dataIndex: "is_active",
-      render: (value, record) => (
-        store?.userData?.email != record.email ?
-          <Switch checked={value} size="small" onClick={() => handleChangeStatus(record)}></Switch>
-          : <></>
-      )
+      render: (value, record) =>
+        store?.userData?.email != record.email ? (
+          <Switch
+            checked={value}
+            size="small"
+            onClick={() => handleChangeStatus(record)}
+          ></Switch>
+        ) : (
+          <></>
+        ),
     },
     {
       title: "",
@@ -115,7 +174,11 @@ function Agenda() {
       key: "action",
       dataIndex: "edit",
       render: (text, record) => (
-        <Button type="primary" className="btn-faint-danger">
+        <Button
+          type="primary"
+          className="btn-faint-danger"
+          onClick={() => showModal("Delete")}
+        >
           <DeleteOutlined />
         </Button>
       ),
@@ -125,10 +188,12 @@ function Agenda() {
   function handleChangeStatus(data) {
     const config = {
       title: "Konfirmasi",
-      content: `Apakah anda yakin ${data.is_active ? 'menonaktifkan' : 'mengaktifkan'} agenda ini?`,
+      content: `Apakah anda yakin ${
+        data.is_active ? "menonaktifkan" : "mengaktifkan"
+      } agenda ini?`,
       onOk: () => {
         updateStatus(data);
-      }
+      },
     };
 
     Modal.confirm(config);
@@ -137,14 +202,16 @@ function Agenda() {
   function updateStatus(data) {
     setLoading(true);
 
-    axios.put(`/agenda/${data.id}/active`, { is_active: !data.is_active }).then((response) => {
-      getListData();
-      message.success(response.data)
-
-    }).catch(({ response }) => {
-      message.error(response.data)
-      setLoading(false);
-    });
+    axios
+      .put(`/agenda/${data.id}/active`, { is_active: !data.is_active })
+      .then((response) => {
+        getListData();
+        message.success(response.data);
+      })
+      .catch(({ response }) => {
+        message.error(response.data);
+        setLoading(false);
+      });
   }
 
   function handleChangeLimit(val) {
@@ -179,11 +246,10 @@ function Agenda() {
 
   useEffect(() => {
     dispatch({
-      type: 'update',
-      name: 'headerTitle',
-      value: 'Agenda'
+      type: "update",
+      name: "headerTitle",
+      value: "Agenda",
     });
-
 
     getListData();
   }, []);
@@ -193,20 +259,29 @@ function Agenda() {
       <Row className="mb-4 mt-5 pt-2">
         <Col className="search" xs={24} md={12}>
           <Row justify="start">
-
             <Col span={12}>
               <Input
                 value={filter.keyword}
                 prefix={<SearchOutlined />}
                 placeholder="Cari"
-                onChange={(val) => { setFilter({ keyword: val.target.value }) }}
+                onChange={(val) => {
+                  setFilter({ keyword: val.target.value });
+                }}
                 onPressEnter={() => getListData()}
-                suffix={<CloseCircleFilled onClick={() => setFilter({ keyword: '' })} />}
+                suffix={
+                  <CloseCircleFilled
+                    onClick={() => setFilter({ keyword: "" })}
+                  />
+                }
               />
             </Col>
 
             <Col>
-              <Button className="btn-snow btn-sm ml-3" type="primary">
+              <Button
+                className="btn-snow btn-sm ml-3"
+                type="primary"
+                onClick={() => showModal("Filter")}
+              >
                 <ControlOutlined />
               </Button>
             </Col>
@@ -216,19 +291,34 @@ function Agenda() {
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
             <Col className="px-2">
-              <Button className="btn-snow-success" >
-                <UploadOutlined />Import
+              <Button
+                className="btn-snow-success"
+                type="primary"
+                visible={isModalVisible}
+                onClick={() => showModal("Import")}
+              >
+                <UploadOutlined />
+                Import
               </Button>
             </Col>
 
             <Col>
-              <Button className="btn-snow-danger" type="primary" onClick={showModal}>
-                <UploadOutlined />Export
+              <Button
+                className="btn-snow-danger"
+                type="primary"
+                onClick={showModal}
+              >
+                <UploadOutlined />
+                Export
               </Button>
             </Col>
 
             <Col className="pl-2 pr-4 mr-4 border-right">
-              <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
+              <Button
+                className="btn-snow btn-sm"
+                type="primary"
+                onClick={() => getListData()}
+              >
                 <ReloadOutlined />
               </Button>
             </Col>
@@ -238,8 +328,6 @@ function Agenda() {
                 Agenda Baru <PlusOutlined />
               </Button>
             </Col>
-
-
 
             {/* <Col>
               <Button className="btn-snow btn-sm" type="primary">
@@ -275,14 +363,18 @@ function Agenda() {
               </div>
             </Col>
 
-            <Col xs={24} md={12} className="mt-md-0 mt-2 d-flex justify-content-end">
+            <Col
+              xs={24}
+              md={12}
+              className="mt-md-0 mt-2 d-flex justify-content-end"
+            >
               <Pagination total={tableData.total} pageSize={tableData.limit} />
             </Col>
           </Row>
         </Spin>
       </div>
 
-      <Modal
+      {/* <Modal
         title="Agenda Baru"
         visible={isModalVisible}
         onOk={handleOk}
@@ -290,6 +382,14 @@ function Agenda() {
         footer={null}
       >
         <CreateAgenda />
+      </Modal> */}
+      <Modal
+        footer={null}
+        title={modalData?.title}
+        visible={modalData?.visible}
+        onCancel={modalData?.onCancel}
+      >
+        {modalData?.content}
       </Modal>
     </div>
   );
