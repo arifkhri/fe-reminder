@@ -14,6 +14,10 @@ const Import = (props) => {
     setLoading(true)
   };
 
+   function onCancel() {
+    props.afterSubmit();
+  }
+
   return (
     <div className="import-karyawan-component">
       <p>
@@ -31,7 +35,7 @@ const Import = (props) => {
           </Form.Item>
 
           <div className="d-flex justify-content-center">
-            <Button type="link" htmlType="button" onClick>
+            <Button  htmlType="button" onClick={onCancel}>
               Kembali
             </Button>
 
