@@ -16,6 +16,7 @@ import useLocalData from "../../core/hooks/useLocalData";
 import ImportEmployee from "./components/Import";
 import NewEmployee from "./components/New";
 import FilterEmployee from "./components/Filter";
+import UpdateEmployee from "./components/Update";
 
 function Employee() {
   const { store, dispatch } = useLocalData();
@@ -78,6 +79,7 @@ function Employee() {
         <Button
           className="btn-sm btn-faint-primary"
           type=""
+          onClick={() => showModal("update", record)}
         >
           <EditOutlined />
         </Button>
@@ -103,6 +105,11 @@ function Employee() {
     if (type === "filter") {
       tempModalData.content = <FilterEmployee  data={record} afterSubmit={() => afterSubmitUser()} />;
       tempModalData.title = "Filter Karyawan";
+    }
+
+    if (type === "update") {
+      tempModalData.content = <UpdateEmployee  data={record} afterSubmit={() => afterSubmitUser()} />;
+      tempModalData.title = "Ubah Karyawan";
     }
 
     setModalData(tempModalData);

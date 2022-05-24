@@ -62,10 +62,6 @@ function Filter(props) {
     setLoading(true)
   };
 
-  const onChange = (value: string[][]) => {
-    console.log(value);
-  };
-
   function onFocusEmployeeSelect() {
     if (!options.length) {
       searchEmployee();
@@ -115,7 +111,7 @@ function Filter(props) {
 
           <Spin spinning={loadingSelect}>
           <Form.Item label="Jabatan" name="position" rules={[validation.required()]}>
-            <Select
+            {/* <Select
               onSelect={(value) => onChangeEmployeeSelect(value, 'select')}
               onDeselect={(value) => onChangeEmployeeSelect(value, 'deselect')}
               onFocus={onFocusEmployeeSelect}
@@ -124,7 +120,8 @@ function Filter(props) {
               showArrow
               tagRender={Tag}
               options={options}
-            />
+            /> */}
+            <Input />
           </Form.Item>
            </Spin>
 
