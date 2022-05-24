@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { Form, Button, message, Spin, Row } from "antd";
+import React, { useState } from "react";
+import { Spin, message } from "antd";
 
+import Form from './Form';
 import axios from "../../../core/helpers/axios";
 import useLocalData from "../../../core/hooks/useLocalData";
-import FieldEmployee from "./FieldEmployee";
 
-function Update(props) {
+function New(props) {
   const { store } = useLocalData();
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   axios.config(store);
 
-  function handleSubmit() {
-    const formValues = form.getFieldsValue(true);
+  function handleSubmit(values) {
+    console.log("🚀 ~ file: New.jsx ~ line 14 ~ handleSubmit ~ values", values)
+    const formData = new FormData();
+    formData.set("full_name", values.full_name)
+    formData.set("email", values.email)
+    formData.set("phone", values.phone)
+    formData.set("nik", values.nik)
+    formData.set("file", values.file || '')
+    formData.set("position_id", values.position_id)
+    formData.set("department_id", values.department_id)
 
-    axios.put(`/employee/${props.data.id}`, formValues).then((response) => {
+    setLoading(true);
+
+    axios.put(`/employee/${props.data.id}`, formData).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
-      
+
     }).catch(({ response }) => {
       message.error(response.data);
       setLoading(false);
@@ -29,25 +38,12 @@ function Update(props) {
     props.afterSubmit();
   }
 
-  useEffect(() => {
-    form.setFieldsValue(props.data);
-  }, [props.data])
 
   return (
     <Spin spinning={loading}>
-      <Form form={form} onFinish={handleSubmit} layout="vertical">
-      <Row gutter={[16, 16]}>
-        <FieldEmployee />
-      </Row>
-        <div className="d-flex justify-content-center">
-          <Button onClick={onCancel}>Kembali</Button>
-          <Button type="primary" htmlType="submit">
-            Simpan
-          </Button>
-        </div>
-      </Form>
+        <Form data={props.data} onSubmit={handleSubmit} onCancel={onCancel}/>
     </Spin>
   );
-}
+};
 
-export default Update;
+export default New;

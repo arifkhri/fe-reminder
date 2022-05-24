@@ -56,14 +56,14 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-        store?.userData?.email !== record.email ?
+        // store?.userData?.email !== record.email ?
           <Button
             className="btn-sm btn-faint-primary"
             type=""
             onClick={() => showModal("updateUser", record)}
           >
             <EditOutlined />
-          </Button> : <></>
+          </Button>
       ),
     },
     {
@@ -71,14 +71,13 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-        store?.userData?.email !== record.email ?
           <Button
             className="btn-sm btn-faint-warning"
             type=""
             onClick={() => showModal("updatePassword", record)}
           >
             <LockOutlined />
-          </Button> : <></>
+          </Button>
       ),
     },
   ];
@@ -137,10 +136,10 @@ function User() {
   }
 
   function getListData(changesFilter = {}) {
-    const { limit = null } = changesFilter;
+    const { limit = null, offset = null } = changesFilter;
 
     setLoading(true);
-    axios.get('/user', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: tableData.offset } }).then((response) => {
+    axios.get('/user', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: offset || tableData.offset } }).then((response) => {
       setLoading(false);
       setTableData({
         limit: response.data.limit,
@@ -156,6 +155,10 @@ function User() {
 
   function handleChangeLimit(val) {
     getListData({ limit: val });
+  }
+
+  function handleChangePage(val) {
+    getListData({ offset: val });
   }
 
   useEffect(() => {
@@ -228,7 +231,7 @@ function User() {
             </Col>
 
             <Col xs={24} md={12} className="mt-md-0 mt-2 d-flex justify-content-end">
-              <Pagination total={tableData.total} pageSize={tableData.limit} />
+              <Pagination onChange={handleChangePage} total={tableData.total} pageSize={tableData.limit} />
             </Col>
           </Row>
         </Spin>

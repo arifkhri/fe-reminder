@@ -1,41 +1,29 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Card,
-  Row,
-  Col,
-  Modal,
-  message,
-  Spin,
-  Upload
-} from "antd";
-import { UploadOutlined, FolderOpenOutlined } from "@ant-design/icons";
+import { Spin, message } from "antd";
 
-import validation from "../../../core/helpers/validation";
+import Form from './Form';
 import axios from "../../../core/helpers/axios";
 import useLocalData from "../../../core/hooks/useLocalData";
 
-function New() {
+function New(props) {
   const { store } = useLocalData();
   const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState({ offset: 0, limit: 10, resource: [], current: 0, total: 0 });
-  const [modalData, setModalData] = useState(null);
-  const [form] = Form.useForm();
   axios.config(store);
 
-  //   const onFinish = (values) => {
-  //     setLoading(true)
+  function handleSubmit(values) {
+    console.log("🚀 ~ file: New.jsx ~ line 14 ~ handleSubmit ~ values", values)
+    const formData = new FormData();
+    formData.set("full_name", values.full_name)
+    formData.set("email", values.email)
+    formData.set("phone", values.phone)
+    formData.set("nik", values.nik)
+    formData.set("file", values.file || '')
+    formData.set("position_id", values.position_id)
+    formData.set("department_id", values.department_id)
 
-  //   };
-
-  function handleSubmit() {
-    const { limit = null } = handleSubmit;
     setLoading(true);
 
-    axios.post('/employee', { params: {limit: limit || tableData.limit, offset: tableData.offset } }).then((response) => {
+    axios.post('/employee', formData).then((response) => {
       setLoading(false);
       message.success(response.data);
       props.afterSubmit();
@@ -51,99 +39,10 @@ function New() {
   }
 
 
-  const props = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
   return (
-    <div className="new-employee-component">
-      <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Form.Item
-              label="Photo"
-              name={"picture_url"}
-              rules={[validation.required()]}>
-              <Upload {...props}>
-                <Input suffix={<FolderOpenOutlined />}></Input>
-              </Upload>
-            </Form.Item>
-          </Col>
-
-
-          <Col span={12} >
-            <Form.Item
-              label="NIK"
-              name={"nik"}
-              rules={[validation.required()]}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Department"
-              name={"department"}
-              rules={[validation.required()]}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Email"
-              name={"email"}
-              rules={[validation.required("please input your email"), validation.email()]}>
-              <Input />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item
-              label="Nama Lengkap"
-              name={"full_name"}
-              rules={[validation.required()]}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Jabatan"
-              name={"position"}
-              rules={[validation.required()]}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="No. Telepon"
-              name={"phone"}
-              rules={[validation.required()]}>
-              <Input />
-            </Form.Item>
-          </Col>
-
-        </Row>
-
-        <div className="d-flex justify-content-center">
-          <Button htmlType="button" onClick={onCancel}>
-            Kembali
-          </Button>
-
-          <Button type="primary" htmlType="submit">
-            Kirim
-          </Button>
-        </div>
-      </Form>
-    </div>
+    <Spin spinning={loading}>
+        <Form onSubmit={handleSubmit} onCancel={onCancel}/>
+    </Spin>
   );
 };
 

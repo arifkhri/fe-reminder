@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Select, Button, Row, Col, Input, Modal, Pagination, Spin } from 'antd';
-import {
-  EditOutlined,
-  SearchOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-  UploadOutlined,
-  MailOutlined,
-  ControlOutlined,
-  CloseCircleFilled
-} from "@ant-design/icons";
+import { EditOutlined, SearchOutlined, PlusOutlined, ReloadOutlined, UploadOutlined, MailOutlined, ControlOutlined, CloseCircleFilled } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
@@ -125,11 +116,15 @@ function Employee() {
     getListData({ limit: val });
   }
 
+  function handleChangePage(val) {
+    getListData({ offset: val });
+  }
+
   function getListData(changesFilter = {}) {
-    const { limit = null } = changesFilter;
+    const { limit = null, offset = null } = changesFilter;
 
     setLoading(true);
-    axios.get('/employee', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: tableData.offset } }).then((response) => {
+    axios.get('/employee', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: offset || tableData.offset } }).then((response) => {
       setLoading(false);
       setTableData({
         limit: response.data.limit,
@@ -142,6 +137,8 @@ function Employee() {
       setLoading(false);
     });
   }
+
+
 
   useEffect(() => {
 
@@ -237,7 +234,7 @@ function Employee() {
             </Col>
 
             <Col xs={24} md={12} className="mt-md-0 mt-2 d-flex justify-content-end">
-              <Pagination total={tableData.total} pageSize={tableData.limit} />
+              <Pagination onChange={handleChangePage} total={tableData.total} pageSize={tableData.limit} />
             </Col>
           </Row>
         </Spin>

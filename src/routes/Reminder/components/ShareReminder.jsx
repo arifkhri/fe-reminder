@@ -5,24 +5,7 @@ import axios from "../../../core/helpers/axios";
 import useLocalData from "../../../core/hooks/useLocalData";
 import { debounce } from '../../../core/utils';
 import validation from "../../../core/helpers/validation";
-
-function Tag(props) {
-  const { label } = props;
-
-  const onPreventMouseDown = event => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  return (
-    <BaseTag
-      color="blue"
-      onMouseDown={onPreventMouseDown}
-    >
-      {label}
-    </BaseTag>
-  );
-}
+import Tag from "../../../components/TagBlue";
 
 function ShareReminder(props) {
   const { store } = useLocalData();

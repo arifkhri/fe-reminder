@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Dropdown, Menu } from "antd";
 import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 
+import FilterAgenda from "../../components/FilterAgenda";
 import AgendaComplete from "./components/AgendaComplete"
 import ShareReminder from "./components/ShareReminder"
 import axios from "../../core/helpers/axios";
@@ -123,7 +124,7 @@ function Reminder() {
   ];
 
   function getListData(changesFilter = {}) {
-    const { limit = null } = changesFilter;
+    const { limit = null, offset = null } = changesFilter;
 
     setLoading(true);
     axios.get("/agenda", {
@@ -131,7 +132,7 @@ function Reminder() {
         isActive: true,
         keyword: filter.keyword,
         limit: limit || tableData.limit,
-        offset: tableData.offset,
+        offset: offset || tableData.offset,
       },
     })
       .then((response) => {
@@ -190,6 +191,13 @@ function Reminder() {
       tempModalData.title = "Agenda Selesai";
     }
 
+    if (type === "filterAgenda") {
+      tempModalData.content = (
+        <FilterAgenda afterSubmit={() => afterActionModal()} />
+      );
+      tempModalData.title = "Filter Agenda";
+    }
+
     setModalData(tempModalData);
   }
 
@@ -199,6 +207,10 @@ function Reminder() {
 
   function handleChangeLimit(val) {
     getListData({ limit: val });
+  }
+
+  function handleChangePage(val) {
+    getListData({ offset: val });
   }
 
   useEffect(() => {
@@ -229,7 +241,7 @@ function Reminder() {
             </Col>
 
             <Col>
-              <Button className="btn-snow btn-sm ml-3" type="primary">
+              <Button className="btn-snow btn-sm ml-3" type="primary" onClick={() => showModal("filterAgenda")}>
                 <ControlOutlined />
               </Button>
             </Col>
@@ -292,7 +304,7 @@ function Reminder() {
             </Col>
 
             <Col xs={24} md={12} className="mt-md-0 mt-2 d-flex justify-content-end">
-              <Pagination total={tableData.total} pageSize={tableData.limit} />
+              <Pagination onChange={handleChangePage} total={tableData.total} pageSize={tableData.limit} />
             </Col>
           </Row>
         </Spin>
