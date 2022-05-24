@@ -68,6 +68,11 @@ const rest = {
     
     return axios.patch(enpointUrl, payload, options);
   },
+
+  delete: (url, opt, notV1) => {
+    const {enpointUrl, options} = prepareRequest(url, opt, notV1)
+    return axios.delete(enpointUrl, options);
+  }
 }
 
 export default rest;
