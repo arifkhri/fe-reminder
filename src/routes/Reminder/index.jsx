@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message } from "antd";
+import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Dropdown, Menu } from "antd";
 import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 
 import AgendaComplete from "./components/AgendaComplete"
@@ -163,11 +163,11 @@ function Reminder() {
 
   function reqReminder(ids) {
     setLoading(true);
-    axios.post('/agenda/remind', {ids}).then((response) => {
+    axios.post('/agenda/remind', { ids }).then((response) => {
       setLoading(false);
       message.success(response.data);
       getListData();
-      
+
     }).catch(({ response }) => {
       message.error(response.data);
       setLoading(false);
@@ -239,12 +239,23 @@ function Reminder() {
 
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
-            {/* <Col>
-              <Button className="btn-snow-danger" type="primary">
-                <UploadOutlined />
-                Export
-              </Button>
-            </Col> */}
+            <Col>
+              <Dropdown
+                overlay={<Menu
+                  items={[
+                    {
+                      label: "logout"
+                    }]} />}
+                placement="bottomRight"
+                trigger={['click']}
+              >
+                <Button className="btn-snow-danger" type="primary">
+                  <UploadOutlined />
+                  Export
+                </Button>
+              </Dropdown>
+
+            </Col>
 
             <Col className="px-2">
               <Button className="btn-snow btn-sm" type="primary" onClick={() => getListData()}>
