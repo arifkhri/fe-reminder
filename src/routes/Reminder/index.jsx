@@ -129,7 +129,7 @@ function Reminder() {
     setLoading(true);
     axios.get("/agenda", {
       params: {
-        isActive: true,
+        is_active: true,
         keyword: filter.keyword,
         limit: limit || tableData.limit,
         offset: offset || tableData.offset,
