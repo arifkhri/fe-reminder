@@ -29,7 +29,6 @@ import useLocalData from "../../core/hooks/useLocalData";
 import CreateAgenda from "./components/New";
 import Import from "./components/Import";
 import Filter from "./components/Filter";
-import Delete from "./components/Delete";
 
 function Agenda() {
   const { store, dispatch } = useLocalData();
@@ -48,7 +47,7 @@ function Agenda() {
 
   const showModal = (type, record) => {
     let tempModalData = {
-      content: <CreateAgenda afterSubmit={() => afterSubmitUser()} />,
+      content: <CreateAgenda afterSubmit={() => afterSubmitAgenda()} />,
       title: "Create Agenda",
       visible: true,
       onCancel: () => {
@@ -58,36 +57,29 @@ function Agenda() {
 
     if (type === "Import") {
       tempModalData.content = (
-        <Import data={record} afterSubmit={() => afterSubmitUser()} />
+        <Import data={record} afterSubmit={() => afterSubmitAgenda()} />
       );
       tempModalData.title = "Import Reminder";
     }
 
     if (type === "Filter") {
       tempModalData.content = (
-        <Filter data={record} afterSubmit={() => afterSubmitUser()} />
+        <Filter data={record} afterSubmit={() => afterSubmitAgenda()} />
       );
       tempModalData.title = "Filter Agenda";
-    }
-
-    if (type === "Delete") {
-      tempModalData.content = (
-        <Delete data={record} afterSubmit={() => afterSubmitUser()} />
-      );
-      tempModalData.title = "Hapus Agenda";
     }
 
     setModalData(tempModalData);
   };
 
-  function afterSubmitUser() {
+  function afterSubmitAgenda() {
     getListData();
     setModalData({ visible: false });
   }
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
+  // const handleOk = () => {
+  //   setIsModalVisible(false);
+  // };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -172,18 +164,45 @@ function Agenda() {
     {
       title: "",
       key: "action",
-      dataIndex: "edit",
-      render: (text, record) => (
+      dataIndex: "id",
+      render: (values, record) => (
         <Button
           type="primary"
           className="btn-faint-danger"
-          onClick={() => showModal("Delete")}
+          onClick={() => handleDelete(record)}
         >
           <DeleteOutlined />
         </Button>
       ),
     },
   ];
+
+  function handleDelete(record) {
+    const config = {
+      title: `Hapus Agenda`,
+      content: `Apakah anda yakin menghapus agenda ini?`,
+      onOk: () => {
+        reqDeleteAgenda(record);
+      },
+    };
+
+    Modal.confirm(config);
+  }
+
+  function reqDeleteAgenda(data) {
+    setLoading(true);
+    axios
+      .delete(`/agenda/${data.id}`)
+      .then((response) => {
+        setLoading(false);
+        message.success(response.data);
+        getListData();
+      })
+      .catch(({ response }) => {
+        message.error(response.data);
+        setLoading(false);
+      });
+  }
 
   function handleChangeStatus(data) {
     const config = {
