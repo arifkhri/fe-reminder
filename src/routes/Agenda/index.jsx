@@ -135,18 +135,45 @@ function Agenda() {
     {
       title: "",
       key: "action",
-      dataIndex: "edit",
-      render: (text, record) => (
+      dataIndex: "id",
+      render: (_, record) => (
         <Button
           type="primary"
           className="btn-faint-danger"
-          onClick={() => showModal("Delete")}
+          onClick={() => handleDelete(record)}
         >
           <DeleteOutlined />
         </Button>
       ),
     },
   ];
+
+  function handleDelete(record) {
+    const config = {
+      title: `Hapus Agenda`,
+      content: `Apakah anda yakin menghapus agenda ini?`,
+      onOk: () => {
+        reqDeleteAgenda(record);
+      },
+    };
+
+    Modal.confirm(config);
+  }
+
+  function reqDeleteAgenda(data) {
+    setLoading(true);
+    axios
+      .delete(`/agenda/${data.id}`)
+      .then((response) => {
+        setLoading(false);
+        message.success(response.data);
+        getListData();
+      })
+      .catch(({ response }) => {
+        message.error(response.data);
+        setLoading(false);
+      });
+  }
 
   function handleChangeStatus(data) {
     const config = {
