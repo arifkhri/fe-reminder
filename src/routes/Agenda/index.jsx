@@ -29,6 +29,7 @@ import useLocalData from "../../core/hooks/useLocalData";
 import CreateAgenda from "./components/New";
 import Import from "./components/Import";
 import Filter from "../../components/FilterAgenda";
+import Edit from "./components/Edit";
 
 function Agenda() {
   const { store, dispatch } = useLocalData();
@@ -68,6 +69,13 @@ function Agenda() {
         <Filter data={record} afterSubmit={() => afterSubmitAgenda()} />
       );
       tempModalData.title = "Filter Agenda";
+    }
+
+    if (type === "Edit") {
+      tempModalData.content = (
+        <Edit data={record} afterSubmit={() => afterSubmitAgenda()} />
+      );
+      tempModalData.title = "Update Agenda";
     }
 
     setModalData(tempModalData);
@@ -157,7 +165,12 @@ function Agenda() {
       key: "action",
       dataIndex: "edit",
       render: (text, record) => (
-        <Button type="primary" className="btn-faint-primary">
+        <Button
+          type="primary"
+          className="btn-faint-primary"
+          visible={isModalVisible}
+          onClick={() => showModal("Edit")}
+        >
           <EditOutlined />
         </Button>
       ),

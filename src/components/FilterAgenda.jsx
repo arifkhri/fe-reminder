@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  DatePicker,
-} from "antd";
+import { Form, Button, Row, Col, DatePicker } from "antd";
 import dayjs from "dayjs";
 
 import useLocalData from "../core/hooks/useLocalData";
@@ -22,7 +16,14 @@ const FilterAgenda = (props) => {
 
   function handleSubmit() {
     const formValues = form.getFieldsValue(true);
-    console.log("🚀 ~ file: FilterAgenda.jsx ~ line 26 ~ handleSubmit ~ formValues", formValues)
+    console.log(
+      "🚀 ~ file: FilterAgenda.jsx ~ line 26 ~ handleSubmit ~ formValues",
+      formValues
+    );
+  }
+
+  function onCancel() {
+    props.afterSubmit();
   }
 
   return (
@@ -35,7 +36,7 @@ const FilterAgenda = (props) => {
               label="Departemen"
               name={"department"}
             >
-             <SelectDepartment />
+              <SelectDepartment />
             </Form.Item>
             <Form.Item
               className="tanggal-agenda"
@@ -50,18 +51,10 @@ const FilterAgenda = (props) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              className="jabatan"
-              label="Jabatan"
-              name={"position"}
-            >
-             <SelectPosition />
+            <Form.Item className="jabatan" label="Jabatan" name={"position"}>
+              <SelectPosition />
             </Form.Item>
-            <Form.Item
-              className="reminder"
-              label="Reminder"
-              name={"reminder"}
-            >
+            <Form.Item className="reminder" label="Reminder" name={"reminder"}>
               <DatePicker
                 placeholder=""
                 value={dayjs("D MMMM YYYY HH:mm", dateFormat)}
@@ -72,7 +65,7 @@ const FilterAgenda = (props) => {
         </Row>
 
         <div className="d-flex justify-content-center">
-          <Button type="" htmlType="button">
+          <Button type="" htmlType="button" onClick={onCancel}>
             Kembali
           </Button>
 
