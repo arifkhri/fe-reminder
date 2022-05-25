@@ -4,7 +4,7 @@ const menu  = [{
   to: '/reminder',
   title: 'Reminder',
 }, {
-  icon: 'agenda-icon',
+  icon: 'agenda-icon',  
   iconActive: 'active-agenda-icon',
   to: '/agenda',
   title: 'Agenda',

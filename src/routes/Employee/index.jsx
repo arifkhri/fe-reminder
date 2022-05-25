@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Select, Button, Row, Col, Input, Modal, Pagination, Spin } from 'antd';
-import { EditOutlined, SearchOutlined, PlusOutlined, ReloadOutlined, UploadOutlined, MailOutlined, ControlOutlined, CloseCircleFilled } from "@ant-design/icons";
+import { Table, Select, Button, Row, Col, Input, Modal, Pagination, Spin, Dropdown, Menu } from 'antd';
+import { EditOutlined, SearchOutlined, PlusOutlined, ReloadOutlined, UploadOutlined, MailFilled, ControlOutlined, CloseCircleFilled } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
@@ -185,9 +185,22 @@ function Employee() {
             </Col>
 
             <Col>
-              <Button className="btn-snow-danger" type="primary" onClick={showModal}>
+            <Dropdown
+                overlay={<Menu
+                  items={[
+                    {
+                      label: "Berdasarkan Filter"
+                    },
+                    {
+                      label: "Semua data"
+                    }]} />}
+                placement="bottomRight"
+                trigger={['click']}
+              >
+              <Button className="btn-snow-danger" type="primary">
                 <UploadOutlined />Export
               </Button>
+              </Dropdown>
             </Col>
 
             <Col className="pl-2 pr-4 mr-4 border-right">

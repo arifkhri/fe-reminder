@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Switch } from "antd";
+import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Switch,Dropdown, Menu } from "antd";
 import { CloseCircleFilled, ControlOutlined, EditOutlined, SearchOutlined, DeleteOutlined, PlusOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
@@ -296,14 +296,26 @@ function Agenda() {
             </Col>
 
             <Col>
-              <Button
-                className="btn-snow-danger"
-                type="primary"
-                onClick={showModal}
+            <Dropdown
+                overlay={<Menu
+                  items={[
+                    {
+                      label: "Berdasarkan Filter"
+                    },
+                    {
+                      label: "Data yang ditandai"
+                    },
+                    {
+                      label: "Reminder hari ini"
+                    }]} />}
+                placement="bottomRight"
+                trigger={['click']}
               >
+              <Button className="btn-snow-danger" type="primary">
                 <UploadOutlined />
                 Export
               </Button>
+            </Dropdown>
             </Col>
 
             <Col className="pl-2 pr-4 mr-4 border-right">
