@@ -1,21 +1,43 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-
-import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Switch } from "antd";
-import { CloseCircleFilled, ControlOutlined, EditOutlined, SearchOutlined, DeleteOutlined, PlusOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  Modal,
+  Switch,
+  Col,
+  Row,
+  Pagination,
+  Input,
+  Button,
+  Table,
+  Spin,
+  message,
+  Select,
+} from "antd";
+import {
+  EditOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  ReloadOutlined,
+  UploadOutlined,
+  ControlOutlined,
+  CloseCircleFilled,
+} from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
 import CreateAgenda from "./components/New";
-import ImportAgenda from "./components/Import";
-import FilterAgenda from "../../components/FilterAgenda";
+import Import from "./components/Import";
+import Filter from "../../components/FilterAgenda";
 
 function Agenda() {
   const { store, dispatch } = useLocalData();
-  axios.config(store);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({ keyword: "" });
   const [modalData, setModalData] = useState(null);
+  const [values, setValues] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  axios.config(store);
   const [tableData, setTableData] = useState({
     offset: 0,
     limit: 10,
@@ -26,7 +48,7 @@ function Agenda() {
 
   const showModal = (type, record) => {
     let tempModalData = {
-      content: <CreateAgenda afterSubmit={() => afterActionModal()} />,
+      content: <CreateAgenda afterSubmit={() => afterSubmitAgenda()} />,
       title: "Create Agenda",
       visible: true,
       onCancel: () => {
@@ -36,14 +58,14 @@ function Agenda() {
 
     if (type === "Import") {
       tempModalData.content = (
-        <ImportAgenda data={record} afterSubmit={() => afterActionModal()} />
+        <Import data={record} afterSubmit={() => afterSubmitAgenda()} />
       );
       tempModalData.title = "Import Reminder";
     }
 
     if (type === "Filter") {
       tempModalData.content = (
-        <FilterAgenda afterSubmit={() => afterActionModal()} />
+        <Filter data={record} afterSubmit={() => afterSubmitAgenda()} />
       );
       tempModalData.title = "Filter Agenda";
     }
@@ -51,10 +73,18 @@ function Agenda() {
     setModalData(tempModalData);
   };
 
-  function afterActionModal() {
+  function afterSubmitAgenda() {
     getListData();
     setModalData({ visible: false });
   }
+
+  // const handleOk = () => {
+  //   setIsModalVisible(false);
+  // };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const columns = [
     {
@@ -136,7 +166,7 @@ function Agenda() {
       title: "",
       key: "action",
       dataIndex: "id",
-      render: (_, record) => (
+      render: (values, record) => (
         <Button
           type="primary"
           className="btn-faint-danger"
@@ -208,19 +238,15 @@ function Agenda() {
     getListData({ limit: val });
   }
 
-  function handleChangePage(val) {
-    getListData({ offset: val });
-  }
-
   function getListData(changesFilter = {}) {
-    const { limit = null, offset = null } = changesFilter;
+    const { limit = null } = changesFilter;
     setLoading(true);
     axios
       .get("/agenda", {
         params: {
           keyword: filter.keyword,
           limit: limit || tableData.limit,
-          offset: offset || tableData.offset,
+          offset: tableData.offset,
         },
       })
       .then((response) => {
@@ -288,6 +314,7 @@ function Agenda() {
               <Button
                 className="btn-snow-success"
                 type="primary"
+                visible={isModalVisible}
                 onClick={() => showModal("Import")}
               >
                 <UploadOutlined />
@@ -361,12 +388,21 @@ function Agenda() {
               md={12}
               className="mt-md-0 mt-2 d-flex justify-content-end"
             >
-              <Pagination onChange={handleChangePage} total={tableData.total} pageSize={tableData.limit} />
+              <Pagination total={tableData.total} pageSize={tableData.limit} />
             </Col>
           </Row>
         </Spin>
       </div>
 
+      {/* <Modal
+        title="Agenda Baru"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <CreateAgenda />
+      </Modal> */}
       <Modal
         footer={null}
         title={modalData?.title}
