@@ -9,9 +9,18 @@ import useLocalData from "../../../core/hooks/useLocalData";
 const New = (props) => {
   const { store } = useLocalData();
   const [loading, setLoading] = useState(null);
-  axios.config(store);
-  const dateFormat = "D MMMM YYYY";
+  const [filter, setFilter] = useState({ keyword: "" });
   const [form] = Form.useForm();
+  const formValues = form.getFieldsValue(true);
+  let dateFormat = "";
+  axios.config(store);
+  const [tableData, setTableData] = useState({
+    offset: 0,
+    limit: 10,
+    resource: [],
+    current: 0,
+    total: 0,
+  });
   //   const onFinish = (values) => {
   //     console.log("Success:", values);
   //   };
@@ -20,8 +29,34 @@ const New = (props) => {
   //     console.log("Failed:", errorInfo);
   //   };
 
+  function getEmployee(changesFilter = {}) {
+    const { limit = null, offset = null } = changesFilter;
+
+    setLoading(true);
+    axios
+      .get("/employee", {
+        params: {
+          keyword: filter.keyword,
+          limit: limit || tableData.limit,
+          offset: offset || tableData.offset,
+        },
+      })
+      .then((response) => {
+        setLoading(false);
+        setTableData({
+          limit: response.data.limit,
+          offset: response.data.offset,
+          current: tableData.current,
+          resource: response.data.data,
+          total: response.data.total,
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }
+
   function handleSubmit() {
-    const formValues = form.getFieldsValue(true);
     setLoading(true);
 
     axios
@@ -48,7 +83,7 @@ const New = (props) => {
           <Form.Item
             className="employee"
             label="Karyawan"
-            name={"employee_id"}
+            name={"full_name"}
             rules={[validation.required()]}
           >
             <Input />
@@ -61,7 +96,7 @@ const New = (props) => {
           >
             <DatePicker
               placeholder=""
-              value={dayjs("D MMMM YYYY", dateFormat)}
+              value={dayjs("D-MMMM-YYYY", dateFormat)}
               format={dateFormat}
             />
           </Form.Item>
@@ -75,7 +110,8 @@ const New = (props) => {
           >
             <DatePicker
               placeholder=""
-              value={dayjs("D MMMM YYYY", dateFormat)}
+              showTime={{ format: "HH:mm:ss" }}
+              value={dayjs("D-MMMM-YYYY HH:mm:ss", dateFormat)}
               format={dateFormat}
             />
           </Form.Item>

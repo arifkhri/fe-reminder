@@ -16,15 +16,17 @@ function New(props) {
     const formValues = form.getFieldsValue(true);
     setLoading(true);
 
-    axios.post('/user', formValues).then((response) => {
-      setLoading(false);
-      message.success(response.data);
-      props.afterSubmit();
-
-    }).catch(({ response }) => {
-      message.error(response.data);
-      setLoading(false);
-    });
+    axios
+      .post("/user", formValues)
+      .then((response) => {
+        setLoading(false);
+        message.success(response.data);
+        props.afterSubmit();
+      })
+      .catch(({ response }) => {
+        message.error(response.data);
+        setLoading(false);
+      });
   }
 
   function onCancel() {
@@ -36,7 +38,7 @@ function New(props) {
       <Form onFinish={handleSubmit} form={form} layout="vertical">
         <FieldMain />
         <FieldPassword />
-        
+
         <div className="d-flex justify-content-center">
           <Button onClick={onCancel}>Kembali</Button>
           <Button type="primary" htmlType="submit">
