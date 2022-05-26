@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Dropdown, Menu } from "antd";
-import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined } from "@ant-design/icons";
+import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined, CheckSquareOutlined, InfoCircleFilled } from "@ant-design/icons";
 
 import FilterAgenda from "../../components/FilterAgenda";
 import AgendaComplete from "./components/AgendaComplete"
@@ -71,7 +71,7 @@ function Reminder() {
       render: (_, record) => {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
-            <span className="desc-value">Keperluan</span>
+            <span className="desc-value"><InfoCircleFilled />   Keperluan </span>
             <span className="value">{record.description}</span>
           </div>
         )
@@ -84,7 +84,7 @@ function Reminder() {
       render: (_, record) => {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
-            <span className="desc-value">Tanggal Diingatkan</span>
+            <span className="desc-value"><FieldTimeOutlined />  Tanggal Diingatkan</span>
             <span className="value">{dayjs(record.remind_at).format("D MMMM YYYY HH:mm")}</span>
           </div>
         )
@@ -245,8 +245,26 @@ function Reminder() {
                 <ControlOutlined />
               </Button>
             </Col>
+          
+            <Col>
+            <Dropdown
+                overlay={<Menu
+                  items={[
+                    {
+                      label: "Ingatkan kembali besok"
+                    },
+                    {
+                      label: "Bagikan"
+                    }]} />}
+                placement="bottomRight"
+                trigger={['click']}
+              >
+              <Button className="btn-snow btn-sm ml-3" type="primary" >
+              <CheckSquareOutlined />
+              </Button>
+            </Dropdown>
+            </Col>
           </Row>
-
         </Col>
 
         <Col xs={24} md={12} className="mt-md-0  mt-2">
@@ -256,7 +274,13 @@ function Reminder() {
                 overlay={<Menu
                   items={[
                     {
-                      label: "logout"
+                      label: "Berdasarkan Filter"
+                    },
+                    {
+                      label: "Data yang ditandai"
+                    },
+                    {
+                      label: "Reminder hari ini"
                     }]} />}
                 placement="bottomRight"
                 trigger={['click']}
