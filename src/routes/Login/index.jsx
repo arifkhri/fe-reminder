@@ -108,16 +108,20 @@ function Login() {
         </Card>
       </Spin>
 
-      <Modal
-        width={'400px'}
-        footer={null}
-        title="Lupa Password"
-        visible={isModalVisible}
-        onOk={() => setIsModalVisible(true)}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <ForgotPassword afterSubmit={() => setIsModalVisible(false)} />
-      </Modal>
+      {
+        isModalVisible && (
+          <Modal
+            width={'400px'}
+            footer={null}
+            title="Lupa Password"
+            visible={isModalVisible}
+            onOk={() => setIsModalVisible(true)}
+            onCancel={() => setIsModalVisible(false)}
+          >
+            <ForgotPassword afterSubmit={() => setIsModalVisible(false)} />
+          </Modal>
+        )
+      }
     </div>
   );
 }

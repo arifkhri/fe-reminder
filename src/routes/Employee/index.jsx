@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Select, Button, Row, Col, Input, Modal, Pagination, Spin, Dropdown, Menu } from 'antd';
+import { Table, Select, Button, Row, Col, Input, Modal, Pagination, Spin, Dropdown, Menu, Image } from 'antd';
 import { EditOutlined, SearchOutlined, PlusOutlined, ReloadOutlined, UploadOutlined, MailFilled, ControlOutlined, CloseCircleFilled } from "@ant-design/icons";
 
 import axios from "../../core/helpers/axios";
@@ -8,6 +8,7 @@ import ImportEmployee from "./components/Import";
 import NewEmployee from "./components/New";
 import FilterEmployee from "./components/Filter";
 import UpdateEmployee from "./components/Update";
+import config from '../../config';
 
 function Employee() {
   const { store, dispatch } = useLocalData();
@@ -20,9 +21,24 @@ function Employee() {
   const columns = [
     {
       title: "",
+      with: "60px",
       dataIndex: "picture_url",
       key: "picture",
-      render: (value) => <img src={value || "images/employee-default.png"} alt="employee" />
+      render: (value) => {
+        return (
+          <Image
+            width={80}
+            src={value ? `${config.API_BE_URL}/picture/employee/${value}` : "images/employee-default.png"}
+            placeholder={
+              <Image
+                preview={false}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200"
+                width={200}
+              />
+            }
+          />
+        )
+      },
     },
     {
       title: "NAMA",
@@ -61,6 +77,9 @@ function Employee() {
       title: "NO.TELP",
       key: "tags",
       dataIndex: "phone",
+      render: (value) => {
+        return `+62${value}`
+      }
     },
     {
       title: "",
@@ -94,12 +113,12 @@ function Employee() {
     }
 
     if (type === "filter") {
-      tempModalData.content = <FilterEmployee  data={record} afterSubmit={() => afterSubmitUser()} />;
+      tempModalData.content = <FilterEmployee filterValues={filter} afterSubmit={(values) => afterSubmitFilter(values)} />;
       tempModalData.title = "Filter Karyawan";
     }
 
     if (type === "update") {
-      tempModalData.content = <UpdateEmployee  data={record} afterSubmit={() => afterSubmitUser()} />;
+      tempModalData.content = <UpdateEmployee data={record} afterSubmit={() => afterSubmitUser()} />;
       tempModalData.title = "Ubah Karyawan";
     }
 
@@ -111,6 +130,10 @@ function Employee() {
     setModalData({ visible: false });
   }
 
+  function afterSubmitFilter(values) {
+    getListData({ keyword: filter.keyword, ...values });
+    setModalData({ visible: false });
+  }
 
   function handleChangeLimit(val) {
     getListData({ limit: val });
@@ -121,10 +144,10 @@ function Employee() {
   }
 
   function getListData(changesFilter = {}) {
-    const { limit = null, offset = null } = changesFilter;
+    const { limit = null, offset = null, ...resChangesFilter } = changesFilter;
 
     setLoading(true);
-    axios.get('/employee', { params: { keyword: filter.keyword, limit: limit || tableData.limit, offset: offset || tableData.offset } }).then((response) => {
+    axios.get('/employee', { params: { ...resChangesFilter, limit: limit || tableData.limit, offset: offset || tableData.offset } }).then((response) => {
       setLoading(false);
       setTableData({
         limit: response.data.limit,
@@ -133,15 +156,14 @@ function Employee() {
         resource: response.data.data,
         total: response.data.total
       });
+      setFilter(resChangesFilter)
+
     }).catch(() => {
       setLoading(false);
     });
   }
 
-
-
   useEffect(() => {
-
     dispatch({
       type: 'update',
       name: 'headerTitle',
@@ -162,9 +184,9 @@ function Employee() {
                 value={filter.keyword}
                 prefix={<SearchOutlined />}
                 placeholder="Cari"
-                onChange={(val) => { setFilter({ keyword: val.target.value }) }}
-                onPressEnter={() => getListData()}
-                suffix={<CloseCircleFilled onClick={() => setFilter({ keyword: '' })} />}
+                onChange={(val) => { setFilter({ ...filter, keyword: val.target.value }) }}
+                onPressEnter={() => getListData({ ...filter, keyword: filter.keyword })}
+                suffix={<CloseCircleFilled onClick={() => setFilter({ ...filter, keyword: '' })} />}
               />
             </Col>
 
@@ -179,13 +201,13 @@ function Employee() {
         <Col xs={24} md={12} className="mt-md-0  mt-2">
           <Row justify="end">
             <Col className="px-2">
-              <Button className="btn-snow-success" type="primary"  onClick={() => showModal("import")}>
+              <Button className="btn-snow-success" type="primary" onClick={() => showModal("import")}>
                 <UploadOutlined />Import
               </Button>
             </Col>
 
             <Col>
-            <Dropdown
+              <Dropdown
                 overlay={<Menu
                   items={[
                     {
@@ -197,9 +219,9 @@ function Employee() {
                 placement="bottomRight"
                 trigger={['click']}
               >
-              <Button className="btn-snow-danger" type="primary">
-                <UploadOutlined />Export
-              </Button>
+                <Button className="btn-snow-danger" type="primary">
+                  <UploadOutlined />Export
+                </Button>
               </Dropdown>
             </Col>
 
@@ -229,7 +251,7 @@ function Employee() {
       <div className="list">
         <Spin spinning={loading}>
           <Table columns={columns} dataSource={tableData.resource} size="small" pagination={false} />
-          
+
           <Row className="mt-2">
             <Col xs={24} md={12}>
               <div className="d-flex align-items-center">
@@ -253,14 +275,18 @@ function Employee() {
         </Spin>
       </div>
 
-       <Modal
-        footer={null}
-        title={modalData?.title}
-        visible={modalData?.visible}
-        onCancel={modalData?.onCancel}
-      >
-        {modalData?.content}
-      </Modal>
+      {
+        modalData?.visible && (
+          <Modal
+            footer={null}
+            title={modalData?.title}
+            visible={modalData?.visible}
+            onCancel={modalData?.onCancel}
+          >
+            {modalData?.content}
+          </Modal>
+        )
+      }
     </div>
   );
 }

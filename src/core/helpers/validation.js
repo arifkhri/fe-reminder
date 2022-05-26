@@ -61,6 +61,30 @@ const validation = {
     });
   },
 
+  /**
+   * Min validation.
+   *
+   * @param fieldName - The  for benchmark
+   * @param message - The message for validation
+   * @returns The promise validation
+  */
+   password: function (message) {
+    return () => ({
+      validator(_, value) {
+        if(!value) {
+          return Promise.reject(new Error(defaultMessage['required']));
+        } else {
+          const checkPassword = (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/).test(value)
+          if (checkPassword && value.length >= 6) {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error(message || `Minimal Karakter 6 dan gunakan huruf besar/kecil [A-z], angka [0-9] dan karakter khusus [~!@]`));
+        }
+
+      },
+    });
+  },
+
 }
 
 export default validation;

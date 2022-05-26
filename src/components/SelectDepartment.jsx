@@ -43,21 +43,33 @@ function SelectDepartment(props) {
   }
 
   function onChangeDepartmentSelect(value, from) {
-
     let department = values;
-    if (from === 'select') {
+    if (props.component?.mode === false && from !== 'deselect') {
       departmentData.forEach((data) => {
         if (data.name === value) {
-          department.push(data);
+          department = data;
         }
       });
-      setValues(department);
+      props.onSelect(department);
 
     } else {
-
-      department = department.SelectDepartment((data) => data.name !== value);
-      setValues(department);
+      if (from === 'select') {
+        departmentData.forEach((data) => {
+          if (data.name === value) {
+            department.push(data);
+          }
+        });
+        setValues(department);
+        props.onSelect(department);
+        
+      } else {
+        
+        department = department.filter((data) => data.name !== value);
+        props.onSelect(department);
+        setValues(department);
+      }
     }
+
   }
 
   return (
@@ -71,6 +83,8 @@ function SelectDepartment(props) {
         showArrow
         tagRender={Tag}
         options={options}
+        value={props.valueSelect}
+        {...props.component}
       />
     </Spin>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Spin, Select } from "antd";
 
 import axios from "../core/helpers/axios";
@@ -17,7 +17,7 @@ function SelectPosition(props) {
   function searchPosition(keyword) {
     setLoading(true);
     debounce(() => {
-      axios.get('/masterdata/position', { params: { keyword } }).then((response) => {
+      axios.get('/masterdata/position', { params: { ...(props.params || {}), keyword } }).then((response) => {
         const newResponse = [];
         (response.data?.data || []).forEach((data) => {
           newResponse.push({
@@ -38,6 +38,7 @@ function SelectPosition(props) {
 
   function onFocusPositionSelect() {
     if (!options.length) {
+      setOptions([]);
       searchPosition();
     }
   }
@@ -45,20 +46,39 @@ function SelectPosition(props) {
   function onChangePositionSelect(value, from) {
 
     let position = values;
-    if (from === 'select') {
+
+    if (props.component?.mode === false && from !== 'deselect') {
       positionData.forEach((data) => {
         if (data.name === value) {
-          position.push(data);
+          position = data;
         }
       });
-      setValues(position);
+      props.onSelect(position);
 
     } else {
+      if (from === 'select') {
+        positionData.forEach((data) => {
+          if (data.name === value) {
+            position.push(data);
+          }
+        });
+        setValues(position);
+        props.onSelect(position);
 
-      position = position.filter((data) => data.name !== value);
-      setValues(position);
+      } else {
+
+        position = position.filter((data) => data.name !== value);
+        setValues(position);
+        props.onSelect(position);
+      }
     }
   }
+
+  useEffect(() => {
+    if(props.clearOptions) {
+      setOptions([]);
+    }
+  }, [props.clearOptions])
 
   return (
     <Spin spinning={loading}>
@@ -71,6 +91,8 @@ function SelectPosition(props) {
         showArrow
         tagRender={Tag}
         options={options}
+        {...props.component}
+        value={props.valueSelect}
       />
     </Spin>
   );

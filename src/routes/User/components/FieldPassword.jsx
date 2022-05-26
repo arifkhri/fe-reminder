@@ -9,7 +9,7 @@ function FieldPassword() {
       <Form.Item
         name={"password"}
         label="Password"
-        rules={[validation.required(), validation.min(6, "")]}
+        rules={[validation.password()]}
       >
         <Input.Password />
       </Form.Item>

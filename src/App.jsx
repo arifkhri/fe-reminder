@@ -1,5 +1,4 @@
 import React, { useMemo, useReducer } from "react";
-import { BrowserRouter } from "react-router-dom";
 
 import { LocalDataContext } from './core/context';
 import localDataReducer from './core/reducer';
@@ -14,9 +13,7 @@ export default function App() {
 
   return (
     <LocalDataContext.Provider value={contextValue}>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
+      <Routes />
     </LocalDataContext.Provider>
   );
 };

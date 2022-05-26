@@ -11,7 +11,6 @@ function New(props) {
   axios.config(store);
 
   function handleSubmit(values) {
-    console.log("🚀 ~ file: New.jsx ~ line 14 ~ handleSubmit ~ values", values)
     const formData = new FormData();
     formData.set("full_name", values.full_name)
     formData.set("email", values.email)

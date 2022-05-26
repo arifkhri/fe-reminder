@@ -26,13 +26,11 @@ function ResetPassword() {
     }
 
     axios.post(`/reset-password`, payload, true).then((response) => {
-      console.log("🚀 ~ file: index.jsx ~ line 28 ~ axios.post ~ response", response)
       message.success(response.data);
       navigate("/login");
       setLoading(true);
 
     }).catch(({ response }) => {
-      console.log("🚀 ~ file: index.jsx ~ line 28 ~ axios.post ~ response", response)
       message.error(response.data);
       setLoading(false);
     });
@@ -54,7 +52,7 @@ function ResetPassword() {
                 <Form.Item
                   name={"password"}
                   label="Password"
-                  rules={[validation.required(), validation.min(6)]}
+                  rules={[validation.password()]}
                 >
                   <Input.Password />
                 </Form.Item>

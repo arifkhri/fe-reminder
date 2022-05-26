@@ -14,15 +14,15 @@ function SelectEmployee(props) {
   const [options, setOptions] = useState([]);
   axios.config(store);
 
-  function searchPosition(keyword) {
+  function searchEmployee(keyword) {
     setLoading(true);
     debounce(() => {
-      axios.get('/Position', { params: { keyword } }).then((response) => {
+      axios.get('/employee', { params: { keyword } }).then((response) => {
         const newResponse = [];
         (response.data?.data || []).forEach((data) => {
           newResponse.push({
-            label: data.position,
-            value: data.position,
+            label: data.full_name,
+            value: data.full_name,
           });
         });
         setOptions(newResponse);
@@ -36,41 +36,54 @@ function SelectEmployee(props) {
     }, 1000)
   }
 
-  function onFocusPositionSelect() {
+  function onFocusEmployeeSelect() {
     if (!options.length) {
-      searchPosition();
+      searchEmployee();
     }
   }
 
-  function onChangePositionSelect(value, from) {
+  function onChangeEmployeeSelect(value, from) {
 
     let employee = values;
-    if (from === 'select') {
+    if (!props.component?.mode) {
       employeeData.forEach((data) => {
-        if (data.position === value) {
-          employee.push(data);
+        if (data.full_name === value) {
+          employee = data;
         }
       });
-      setValues(employee);
+      props.onSelect(employee);
 
     } else {
+      if (from === 'select') {
+        employeeData.forEach((data) => {
+          if (data.full_name === value) {
+            employee.push(data);
+          }
+        });
+        setValues(employee);
 
-      employee = employee.filter((data) => data.position !== value);
-      setValues(employee);
+
+      } else {
+        employee = employee.filter((data) => data.full_name !== value);
+        setValues(employee);
+      }
     }
+
   }
 
   return (
     <Spin spinning={loading}>
       <Select
-        onSelect={(value) => onChangePositionSelect(value, 'select')}
-        onDeselect={(value) => onChangePositionSelect(value, 'deselect')}
-        onFocus={onFocusPositionSelect}
-        onSearch={searchPosition}
+        onSelect={(value) => onChangeEmployeeSelect(value, 'select')}
+        onDeselect={(value) => onChangeEmployeeSelect(value, 'deselect')}
+        onFocus={onFocusEmployeeSelect}
+        onSearch={searchEmployee}
         mode="multiple"
         showArrow
         tagRender={Tag}
         options={options}
+        {...props.component}
+        value={props.valueSelect}
       />
     </Spin>
   );

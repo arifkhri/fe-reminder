@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, message, Spin, DatePicker, Input, Switch } from "antd";
-import dayjs from "dayjs";
+import moment from "moment";
 
 import axios from "../../../../core/helpers/axios";
 import useLocalData from "../../../../core/hooks/useLocalData";
@@ -60,7 +60,7 @@ function AgendaComplete(props) {
               getFieldValue("is_renew") && 
               <div className="bg-blue p-4 ">
                 <Form.Item label="Tanggal" name="date" rules={[validation.required()]}>
-                  <DatePicker placeholder={null} value={dayjs('D MMMM YYYY')} format="D MMMM YYYY" />
+                  <DatePicker placeholder={null} value={moment('D MMMM YYYY')} format="D MMMM YYYY" />
                 </Form.Item>
 
                 <Form.Item label="Ingatkan pada" name="remind_day" rules={[validation.required()]}>

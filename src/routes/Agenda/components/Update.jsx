@@ -6,17 +6,17 @@ import useLocalData from "../../../core/hooks/useLocalData";
 import utils from "../utils";
 import Form from "./Form";
 
-const New = (props) => {
+const Update = (props) => {
   const { store } = useLocalData();
   const [loading, setLoading] = useState(null);
   axios.config(store);
-
+  
   function handleSubmit(values) {
-    const payload = utils.normalizePayload(values);
     setLoading(true);
+    const payload = utils.normalizePayload(values);
 
     axios
-      .post("/agenda", payload)
+      .put(`/agenda/${props.data.id}`, payload)
       .then((response) => {
         setLoading(false);
         message.success(response.data);
@@ -34,9 +34,9 @@ const New = (props) => {
 
   return (
     <Spin spinning={loading}>
-      <Form onSubmit={handleSubmit} onCancel={onCancel}/>
+      <Form data={props.data} onSubmit={handleSubmit} onCancel={onCancel}/>
     </Spin>
   );
 };
 
-export default New;
+export default Update;

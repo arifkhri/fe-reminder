@@ -157,3 +157,9 @@ export const debounce = (func, timeout, options) => {
     debounceTimeout = undefined;
   }, timeout);
 };
+
+export const checkPhoneNumber = (event) => {
+  let value = event.target.value.trim();
+  value = value.replace(/0?/);
+  return value.match(/[0-9]+/);
+}

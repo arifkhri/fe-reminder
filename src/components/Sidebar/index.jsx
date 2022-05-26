@@ -5,14 +5,16 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import menu from './menu';
 import CreateAgenda from "../../routes/Agenda/components/New";
+import useLocalData from "../../core/hooks/useLocalData";
 
 import './style.css';
 
 const { Sider } = Layout;
-
+let isRefresh = 0;
 function Sidebar() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const location = useLocation();
+  const { dispatch } = useLocalData();
   const navigate = useNavigate();
 
   function onClickNavItem(to) {
@@ -20,6 +22,11 @@ function Sidebar() {
   }
 
   function afterSubmitAgenda() {
+    dispatch({
+      type: 'update',
+      name: 'refreshList',
+      value: ++isRefresh
+    })
     setIsModalVisible(false);
   }
 
@@ -65,7 +72,7 @@ function Sidebar() {
         onCancel={() => afterSubmitAgenda()}
         footer={null}
       >
-        <CreateAgenda afterSubmit={afterSubmitAgenda}/>
+        <CreateAgenda afterSubmit={afterSubmitAgenda} onCancel={() => setIsModalVisible(false)}/>
       </Modal>
     </>
   );

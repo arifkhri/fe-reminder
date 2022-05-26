@@ -57,13 +57,13 @@ function User() {
       key: "action",
       render: (_, record) => (
         // store?.userData?.email !== record.email ?
-          <Button
-            className="btn-sm btn-faint-primary"
-            type=""
-            onClick={() => showModal("updateUser", record)}
-          >
-            <EditOutlined />
-          </Button>
+        <Button
+          className="btn-sm btn-faint-primary"
+          type=""
+          onClick={() => showModal("updateUser", record)}
+        >
+          <EditOutlined />
+        </Button>
       ),
     },
     {
@@ -71,13 +71,13 @@ function User() {
       align: "center",
       key: "action",
       render: (_, record) => (
-          <Button
-            className="btn-sm btn-faint-warning"
-            type=""
-            onClick={() => showModal("updatePassword", record)}
-          >
-            <LockOutlined />
-          </Button>
+        <Button
+          className="btn-sm btn-faint-warning"
+          type=""
+          onClick={() => showModal("updatePassword", record)}
+        >
+          <LockOutlined />
+        </Button>
       ),
     },
   ];
@@ -237,15 +237,19 @@ function User() {
         </Spin>
       </div>
 
-      <Modal
-        footer={null}
-        title={modalData?.title}
-        visible={modalData?.visible}
-        onCancel={modalData?.onCancel}
-      >
-        {modalData?.content}
-      </Modal>
+      {
+        modalData?.visible && (
+          <Modal
+            footer={null}
+            title={modalData?.title}
+            visible={modalData?.visible}
+            onCancel={modalData?.onCancel}
+          >
+            {modalData?.content}
+          </Modal>
 
+        )
+      }
     </>
   );
 }

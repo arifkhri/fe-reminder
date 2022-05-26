@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import moment from "moment";
 
-import { Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Dropdown, Menu } from "antd";
+import { Image, Table, Button, Col, Input, Row, Pagination, Spin, Modal, Select, message, Dropdown, Menu } from "antd";
 import { CloseCircleFilled, ControlOutlined, FieldTimeOutlined, ShareAltOutlined, CheckOutlined, SearchOutlined, ReloadOutlined, UploadOutlined, CheckSquareOutlined, InfoCircleFilled } from "@ant-design/icons";
 
 import FilterAgenda from "../../components/FilterAgenda";
@@ -9,6 +9,7 @@ import AgendaComplete from "./components/AgendaComplete"
 import ShareReminder from "./components/ShareReminder"
 import axios from "../../core/helpers/axios";
 import useLocalData from "../../core/hooks/useLocalData";
+import config from "../../config";
 
 function Reminder() {
   const { store, dispatch } = useLocalData();
@@ -23,7 +24,21 @@ function Reminder() {
       title: "",
       dataIndex: "employee_picture_url",
       key: "picture",
-      render: (value) => <img src={value || "images/employee-default.png"} alt="employee" />
+      render: (value) => {
+        return (
+          <Image
+            width={80}
+            src={value ? `${config.API_BE_URL}/picture/employee/${value}` : "images/employee-default.png"}
+            placeholder={
+              <Image
+                preview={false}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200"
+                width={200}
+              />
+            }
+          />
+        )
+      }
     },
     {
       title: "",
@@ -33,7 +48,7 @@ function Reminder() {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
             <span className="value">{record.employee}</span>
-            <span className="desc-value">{record.nik || '-'}</span>
+            <span className="desc-value">{record.employee_nik || '-'}</span>
           </div>
         )
       }
@@ -59,7 +74,7 @@ function Reminder() {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
             <span className="desc-value">Tanggal</span>
-            <span className="value">{dayjs(record.date).format("D MMMM YYYY HH:mm")}</span>
+            <span className="value">{moment(record.date).format("D MMMM YYYY HH:mm")}</span>
           </div>
         )
       }
@@ -85,7 +100,7 @@ function Reminder() {
         return (
           <div className="d-flex d-flex align-items-center flex-column">
             <span className="desc-value"><FieldTimeOutlined />  Tanggal Diingatkan</span>
-            <span className="value">{dayjs(record.remind_at).format("D MMMM YYYY HH:mm")}</span>
+            <span className="value">{moment(record.remind_at).format("D MMMM YYYY HH:mm")}</span>
           </div>
         )
       }
@@ -105,7 +120,7 @@ function Reminder() {
       key: "action",
       dataIndex: "id",
       render: (value, record) => (
-        dayjs().isAfter(dayjs(record.remind_at).format("YYYY-MM-DD HH:mm:ss")) &&
+        moment().isAfter(moment(record.remind_at).format("YYYY-MM-DD HH:mm:ss")) &&
         <Button type="primary" className="btn-sm btn-faint-danger" onClick={() => handleReminder([value])}>
           <FieldTimeOutlined />
         </Button>
@@ -124,15 +139,15 @@ function Reminder() {
   ];
 
   function getListData(changesFilter = {}) {
-    const { limit = null, offset = null } = changesFilter;
+    const { limit = null, offset = null, ...resChangesFilter } = changesFilter;
 
     setLoading(true);
     axios.get("/agenda", {
       params: {
         is_active: true,
-        keyword: filter.keyword,
         limit: limit || tableData.limit,
         offset: offset || tableData.offset,
+        ...resChangesFilter
       },
     })
       .then((response) => {
@@ -144,6 +159,7 @@ function Reminder() {
           resource: response.data.data,
           total: response.data.total,
         });
+        setFilter(resChangesFilter)
       })
       .catch(() => {
         setLoading(false);
@@ -173,7 +189,6 @@ function Reminder() {
       message.error(response.data);
       setLoading(false);
     });
-    console.log("🚀 ~ file: index.jsx ~ line 121 ~ reqReminder ~ ids", ids)
   }
 
   function showModal(type, record) {
@@ -193,12 +208,17 @@ function Reminder() {
 
     if (type === "filterAgenda") {
       tempModalData.content = (
-        <FilterAgenda afterSubmit={() => afterActionModal()} />
+        <FilterAgenda filterValues={filter} afterSubmit={(values) => afterSubmitFilter(values)} />
       );
       tempModalData.title = "Filter Agenda";
     }
 
     setModalData(tempModalData);
+  }
+
+  function afterSubmitFilter(values) {
+    getListData({ keyword: filter.keyword, ...values });
+    setModalData({ visible: false });
   }
 
   function afterActionModal() {
@@ -223,6 +243,12 @@ function Reminder() {
     getListData();
   }, []);
 
+  useEffect(() => {
+    if (store?.refreshList) {
+      getListData();
+    }
+  }, [store?.refreshList])
+
   return (
     <>
       <Row className="mb-4 mt-5 pt-2">
@@ -234,9 +260,9 @@ function Reminder() {
                 value={filter.keyword}
                 prefix={<SearchOutlined />}
                 placeholder="Cari"
-                onChange={(val) => { setFilter({ keyword: val.target.value }) }}
-                onPressEnter={() => getListData()}
-                suffix={<CloseCircleFilled onClick={() => setFilter({ keyword: '' })} />}
+                onChange={(val) => { setFilter({ ...filter, keyword: val.target.value }) }}
+                onPressEnter={() => getListData({ ...filter, keyword: filter.keyword })}
+                suffix={<CloseCircleFilled onClick={() => setFilter({ ...filter, keyword: '' })} />}
               />
             </Col>
 
@@ -245,9 +271,9 @@ function Reminder() {
                 <ControlOutlined />
               </Button>
             </Col>
-          
+
             <Col>
-            <Dropdown
+              <Dropdown
                 overlay={<Menu
                   items={[
                     {
@@ -259,10 +285,10 @@ function Reminder() {
                 placement="bottomRight"
                 trigger={['click']}
               >
-              <Button className="btn-snow btn-sm ml-3" type="primary" >
-              <CheckSquareOutlined />
-              </Button>
-            </Dropdown>
+                <Button className="btn-snow btn-sm ml-3" type="primary" >
+                  <CheckSquareOutlined />
+                </Button>
+              </Dropdown>
             </Col>
           </Row>
         </Col>
@@ -334,16 +360,20 @@ function Reminder() {
         </Spin>
       </div>
 
-      <Modal
-        footer={null}
-        title={modalData?.title}
-        visible={modalData?.visible}
-        onCancel={() => {
-          setModalData({ visible: false });
-        }}
-      >
-        {modalData?.content}
-      </Modal>
+      {
+        modalData?.visible && (
+          <Modal
+            footer={null}
+            title={modalData?.title}
+            visible={modalData?.visible}
+            onCancel={() => {
+              setModalData({ visible: false });
+            }}
+          >
+            {modalData?.content}
+          </Modal>
+        )
+      }
     </>
   );
 }
