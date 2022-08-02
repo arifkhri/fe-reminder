@@ -1,6 +1,6 @@
-# FE HR App
+# FE Reminder
 
- FE HR App is frontend web using react framework
+A project to exercise internship student. This project is CSR based using react JS, rest-api (axios) and antd
 
 ---
 ## Requirement
@@ -15,8 +15,8 @@
     
 ## Installation
 
-    $ git clone https://github.com/arifkhri/fe-hr-app/
-    $ cd fe-hr-app
+    $ git clone https://github.com/arifkhri/fe-reminder/
+    $ cd fe-reminder
     $ npm i
 
 ## Running the project
@@ -26,12 +26,9 @@
     
     
 ---
-### Style Guide:
-> airbnb style https://github.com/airbnb/javascript/tree/master/react
+### Todo:
+- Create a guard route when user refresh the browser, session not auto logout
+- Export feature & Import feature on a several list page
+- Integration a notif 3rd party
+- Background job for sending an email reminder
 
-### Plugins:
-| Plugin | README |
-| ------ | ------ |
-| react-router-dom | https://reactrouter.com/docs/en/v6 |
-| antd | https://ant.design/components/ |
-| dayjs | https://day.js.org/ |
