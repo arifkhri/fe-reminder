@@ -30,5 +30,4 @@ A project to exercise internship student. This project is CSR based using react 
 - Create a guard route when user refresh the browser, session not auto logout
 - Export feature & Import feature on a several list page
 - Integration a notif 3rd party
-- Background job for sending an email reminder
 
