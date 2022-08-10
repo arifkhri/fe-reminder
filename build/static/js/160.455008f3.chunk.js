@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfe_hr_app=self.webpackChunkfe_hr_app||[]).push([[160],{5160:function(e,h,r){r.r(h);r(2791);var n=r(501),s=r(184);h.default=function(){return(0,s.jsxs)("div",{children:[(0,s.jsx)("h2",{children:"Nothing to see here!"}),(0,s.jsx)("p",{children:(0,s.jsx)(n.rU,{to:"/",children:"Go to the home page"})})]})}}}]);
+//# sourceMappingURL=160.455008f3.chunk.js.map

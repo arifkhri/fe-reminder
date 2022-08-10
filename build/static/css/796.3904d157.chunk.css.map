@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/796.3904d157.chunk.css","mappings":"AAAA,SACE,kBAAmB,CACnB,iBACF","sources":["routes/Reminder/components/AgendaComplete/style.css"],"sourcesContent":[".bg-blue {\n  background: #E5F3FE;\n  border-radius: 8px;\n}"],"names":[],"sourceRoot":""}

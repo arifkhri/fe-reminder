@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/759.0c5c2839.chunk.css","mappings":"AAAA,qBAGE,kBAAmB,CAFnB,YAAa,CAGb,YAAa,CAFb,sBAGF","sources":["routes/ResetPassword/style.css"],"sourcesContent":[".reset-password-page {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh;\n}"],"names":[],"sourceRoot":""}
